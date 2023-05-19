@@ -16,7 +16,7 @@ import java.sql.*;
 public class MetaLand {
 
      public static void main(String[] args) {
-         
+           
         //String url = "jdbc:mysql://localhost:3306/mysql?zeroDateTimeBehavior=CONVERT_TO_NULL";
            String url = "jdbc:mysql://localhost:3306/metaland?zeroDateTimeBehavior=CONVERT_TO_NULL";
 
@@ -35,15 +35,17 @@ public class MetaLand {
             Statement statement = conn.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             System.out.println("Giriş başarılı");
+           
             // Sonuçları işleme
             while (resultSet.next()) {
                 // Veri çekme
-                int id = resultSet.getInt("kullanici_no");
+             //  int id = resultSet.getInt("kullanici_soyadi");
                 String ad = resultSet.getString("kullanici_adi");
+                 String soyad = resultSet.getString("kullanici_soyadi");
                 // Diğer sütunları da çekebilirsiniz
 
                 // Sonuçları kullanma
-                System.out.println("ID: " + id + ", Ad: " + ad);
+                System.out.println(" Ad: " + ad+"Soyad: "+soyad);
             }
 
             // Bağlantıyı kapatma
@@ -53,7 +55,9 @@ public class MetaLand {
         }
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new OyunArayuzu();
+               MetalanGirisSayfasi Basla= new MetalanGirisSayfasi();
+               // new OyunArayuzu();
+              
             }
         });
     }
