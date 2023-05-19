@@ -6,6 +6,7 @@ package com.mycompany.metaland;
  * @author aslinurtopcu
  */
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,6 +16,9 @@ public class MetalanGirisSayfasi extends JFrame {
     private JButton kullaniciGirisiButton;
     private JButton yoneticiGirisiButton;
     private JLabel MetalandText;
+
+    private OyuncuGirisiArayuzu oyuncuArayuzu;
+    private YoneticiGirisArayuzu yoneticiArayuzu;
 
     public MetalanGirisSayfasi() {
         setTitle("Metaland Giriş Sayfası");
@@ -40,7 +44,8 @@ public class MetalanGirisSayfasi extends JFrame {
         kullaniciGirisiButton.setBounds(400, 400, 400, 50);
         kullaniciGirisiButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                OyuncuGirisiArayuzu oyuncuArayuzu = new OyuncuGirisiArayuzu();
+                setVisible(false);
+                oyuncuArayuzu = new OyuncuGirisiArayuzu();
                 oyuncuArayuzu.setVisible(true);
             }
         });
@@ -50,7 +55,8 @@ public class MetalanGirisSayfasi extends JFrame {
         yoneticiGirisiButton.setBounds(400, 500, 400, 50);
         yoneticiGirisiButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                YoneticiGirisArayuzu yoneticiArayuzu = new YoneticiGirisArayuzu();
+                setVisible(false);
+                yoneticiArayuzu = new YoneticiGirisArayuzu();
                 yoneticiArayuzu.setVisible(true);
             }
         });
@@ -59,10 +65,18 @@ public class MetalanGirisSayfasi extends JFrame {
         setVisible(true);
     }
 
+    public void showMetalandGirisSayfasi() {
+        setVisible(true);
+    }
+
+    public void hideMetalandGirisSayfasi() {
+        setVisible(false);
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new MetalanGirisSayfasi();
+                MetalanGirisSayfasi girisSayfasi = new MetalanGirisSayfasi();
             }
         });
     }
