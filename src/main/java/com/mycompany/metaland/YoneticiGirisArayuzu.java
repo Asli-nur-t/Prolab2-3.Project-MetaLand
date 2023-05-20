@@ -32,8 +32,8 @@ public class YoneticiGirisArayuzu extends JFrame {
         setSize(1800, 800);
         setLayout(new BorderLayout());
 
-        // Üst panel
-        JPanel topPanel = new JPanel(new GridLayout(4, 2));
+        
+        JPanel topPanel = new JPanel(new GridLayout(4, 2));// Üstteki panel
         topPanel.add(new JLabel("Veritabanı Adı:"));
         textFieldDatabase = new JTextField();
         topPanel.add(textFieldDatabase);
@@ -47,25 +47,30 @@ public class YoneticiGirisArayuzu extends JFrame {
         topPanel.add(connectButton);
         add(topPanel, BorderLayout.NORTH);
 
-        // Orta panel
-        textArea = new JTextArea();
+        
+        textArea = new JTextArea();// Ortadaki panel
         JScrollPane scrollPane = new JScrollPane(textArea);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Düzenle düğmesi
+        
         JButton editButton = new JButton("Düzenle");
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.add(editButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Güncel tabloyu görüntüleme düğmesi
-        JButton viewButton = new JButton("Güncel Tabloyu Görüntüle");
-        buttonPanel.add(viewButton);
+       
+        JButton tabloGosterButou = new JButton("Güncel Tabloyu Görüntüle");
+        buttonPanel.add(tabloGosterButou);
 
-        // Veri ekleme bileşenleri
+        
+        JButton geributonu = new JButton("Geri");
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottomPanel.add(geributonu);
+        add(bottomPanel, BorderLayout.EAST);
+        
         JPanel addPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         addPanel.add(new JLabel("Tablo Seç:"));
-        comboBoxTable = new JComboBox<>(new String[]{"oyuncular", "oyun_verileri"}); // Tablo adlarını buraya ekleyebilirsiniz
+        comboBoxTable = new JComboBox<>(new String[]{"oyuncular", "oyun_verileri"}); //***tablo adlarını manuel ekledim*****
         addPanel.add(comboBoxTable);
         addPanel.add(new JLabel("Sütun Seç:"));
         comboBoxColumn = new JComboBox<>();
@@ -73,22 +78,18 @@ public class YoneticiGirisArayuzu extends JFrame {
         addPanel.add(new JLabel("Değer:"));
         textFieldValue = new JTextField(10);
         addPanel.add(textFieldValue);
-        JButton addButton = new JButton("Ekle");
-        addPanel.add(addButton);
+        JButton ekleButonu = new JButton("Ekle");
+        addPanel.add(ekleButonu);
         add(addPanel, BorderLayout.WEST);
 
-        // Geri dönüş butonu
-        JButton backButton = new JButton("Geri");
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        bottomPanel.add(backButton);
-        add(bottomPanel, BorderLayout.EAST);
+        
 
-        backButton.addActionListener(new ActionListener() {
+        geributonu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MetalanGirisSayfasi metalangirissayfasi = new MetalanGirisSayfasi();
                 metalangirissayfasi.setVisible(true);
-                dispose(); // Yönetici arayüzünü kapat
+                dispose(); 
             }
         });
 
@@ -106,10 +107,15 @@ public class YoneticiGirisArayuzu extends JFrame {
                     Connection connection = DriverManager.getConnection(url, username, password);
                     textArea.setText("Bağlantı başarılı!\n");
 
-                    // Tablo ve sütun seçeneklerini güncelle
+                    
                     updateComboBoxes(connection);
+                    
+                    
+                    
+                    //*******buton işlemleri**********
 
-                    // Düzenle düğmesine tıklanınca veriyi güncelle
+                    
+                    
                     editButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -117,24 +123,27 @@ public class YoneticiGirisArayuzu extends JFrame {
                             String selectedColumn = (String) comboBoxColumn.getSelectedItem();
                             String newValue = textFieldValue.getText();
 
-                            updateData(connection, selectedTable, selectedColumn, newValue);
+                            Guncelle(connection, selectedTable, selectedColumn, newValue);
                         }
                     });
-
-                    // Ekle düğmesine tıklanınca yeni veri ekle
-                    addButton.addActionListener(new ActionListener() {
+                    
+                    
+                    //****özellikle işletme bilgilerine ulaşmalıyım
+                    //
+                    
+                    ekleButonu.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             String selectedTable = (String) comboBoxTable.getSelectedItem();
                             String selectedColumn = (String) comboBoxColumn.getSelectedItem();
                             String newValue = textFieldValue.getText();
 
-                            insertData(connection, selectedTable, selectedColumn, newValue);
+                            DatayiAl(connection, selectedTable, selectedColumn, newValue);
                         }
                     });
 
-                    // Güncel tabloyu görüntüleme düğmesine tıklanınca yeni bir JFrame açarak güncel tabloyu göster
-                    viewButton.addActionListener(new ActionListener() {
+                   
+                    tabloGosterButou.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             JFrame frame = new JFrame("Güncel Tablo");
@@ -186,16 +195,16 @@ public class YoneticiGirisArayuzu extends JFrame {
 
         // Sütun seçeneklerini güncelle
         String selectedTable = (String) comboBoxTable.getSelectedItem();
-        ResultSet columns = metaData.getColumns(null, null, selectedTable, null);
-        ArrayList<String> columnNames = new ArrayList<>();
-        while (columns.next()) {
-            String columnName = columns.getString("COLUMN_NAME");
-            columnNames.add(columnName);
-        }
-        comboBoxColumn.setModel(new DefaultComboBoxModel<>(columnNames.toArray(new String[0])));
+    ResultSet columns = metaData.getColumns(null, null, selectedTable, null);
+    ArrayList<String> columnNames = new ArrayList<>();
+    while (columns.next()) {
+        String columnName = columns.getString("COLUMN_NAME");
+        columnNames.add(columnName);
+    }
+    comboBoxColumn.setModel(new DefaultComboBoxModel<>(columnNames.toArray(new String[0])));
     }
 
-    private void updateData(Connection connection, String table, String column, String newValue) {
+    private void Guncelle(Connection connection, String table, String column, String newValue) {
         try {
             Statement statement = connection.createStatement();
             String updateQuery = "UPDATE " + table + " SET " + column + " = '" + newValue + "'";
@@ -207,7 +216,7 @@ public class YoneticiGirisArayuzu extends JFrame {
         }
     }
 
-    private void insertData(Connection connection, String table, String column, String value) {
+    private void DatayiAl(Connection connection, String table, String column, String value) {
         try {
             Statement statement = connection.createStatement();
             String insertQuery = "INSERT INTO " + table + " (" + column + ") VALUES ('" + value + "')";
