@@ -55,15 +55,23 @@ public class OyunArayuzu {
 
         frame.setLayout(new BorderLayout());
 
-        durumPaneli = new JPanel();
-        frame.add(durumPaneli, BorderLayout.EAST);
+       durumPaneli = new JPanel();
+durumPaneli.setPreferredSize(new Dimension(100, 50));
+durumPaneli.setBackground(Color.CYAN);
+
+frame.add(durumPaneli, BorderLayout.SOUTH);
+
+     
 
         oyunPaneli = new JPanel();
         oyunPaneli.setLayout(new GridLayout(gridBoyutu, gridBoyutu));
+       
+        ImageIcon backgroundImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/citybackG.jpeg");
+        JLabel backgroundLabel = new JLabel(backgroundImage);
+        backgroundLabel.setBounds(0, 0, 1000, 800);
+        frame.add(backgroundLabel);
+
         
-        // Resmi yükle
-        ImageIcon arkaPlanIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/citybackG.jpeg");
-        durumPaneli.add(new JButton(arkaPlanIcon));
         
         // Veritabanı bağlantısını kur
     try {
@@ -73,7 +81,7 @@ public class OyunArayuzu {
     }
 
 
-kullaniciBilgileriPaneli.setPreferredSize(new Dimension(400, 1000));
+kullaniciBilgileriPaneli.setPreferredSize(new Dimension(400, 600));
 frame.add(kullaniciBilgileriPaneli, BorderLayout.EAST);
 
 
@@ -105,7 +113,7 @@ updateKullaniciBilgileri(kullaniciTakmaAdiValue, adValue, soyadValue, paraValue,
 
        araziButonlari = new JButton[gridBoyutu][gridBoyutu];
 cimIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/OyunArayuzu/src/images/grass.png");
-digerResimIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/OyunArayuzu/src/images/grass1.png");
+digerResimIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/grass1.png");
 
 for (int i = 0; i < gridBoyutu; i++) {
     for (int j = 0; j < gridBoyutu; j++) {
