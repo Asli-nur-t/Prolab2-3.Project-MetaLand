@@ -1,4 +1,4 @@
-/*
+ /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -56,14 +56,14 @@ public class OyunArayuzu {
         frame.setLayout(new BorderLayout());
 
         durumPaneli = new JPanel();
-      //  durumPaneli.setPreferredSize(new Dimension(300, 1000));
         frame.add(durumPaneli, BorderLayout.EAST);
-       // durumPaneli.setBackground(Color.CYAN);
 
         oyunPaneli = new JPanel();
         oyunPaneli.setLayout(new GridLayout(gridBoyutu, gridBoyutu));
         
- //oyuncu görünümleri*******
+        // Resmi yükle
+        ImageIcon arkaPlanIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/citybackG.jpeg");
+        durumPaneli.add(new JButton(arkaPlanIcon));
         
         // Veritabanı bağlantısını kur
     try {
@@ -103,21 +103,23 @@ updateKullaniciBilgileri(kullaniciTakmaAdiValue, adValue, soyadValue, paraValue,
        
 //**********arazi düzeni*************************
 
-        araziButonlari = new JButton[gridBoyutu][gridBoyutu];
-        cimIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/OyunArayuzu/src/images/grass.png");
-        digerResimIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/OyunArayuzu/src/images/grass1.png");
+       araziButonlari = new JButton[gridBoyutu][gridBoyutu];
+cimIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/OyunArayuzu/src/images/grass.png");
+digerResimIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/OyunArayuzu/src/images/grass1.png");
 
-        for (int i = 0; i < gridBoyutu; i++) {
-            for (int j = 0; j < gridBoyutu; j++) {
-                araziButonlari[i][j] = new JButton();
-                araziButonlari[i][j].setPreferredSize(new Dimension(25, 25));
-                araziButonlari[i][j].setIcon(cimIcon);
-                araziButonlari[i][j].setContentAreaFilled(false);
-                araziButonlari[i][j].setBorderPainted(false);
-                araziButonlari[i][j].addActionListener(new ButtonActive(i, j));
-                oyunPaneli.add(araziButonlari[i][j]);
-            }
-        }
+for (int i = 0; i < gridBoyutu; i++) {
+    for (int j = 0; j < gridBoyutu; j++) {
+        araziButonlari[i][j] = new JButton();
+        araziButonlari[i][j].setPreferredSize(new Dimension(25, 25));
+        araziButonlari[i][j].setIcon(cimIcon);
+        araziButonlari[i][j].setContentAreaFilled(false);
+        araziButonlari[i][j].setBorderPainted(false);
+        araziButonlari[i][j].setOpaque(false);
+        araziButonlari[i][j].setForeground(new Color(255, 255, 255, 128));
+        araziButonlari[i][j].addActionListener(new ButtonActive(i, j));
+        oyunPaneli.add(araziButonlari[i][j]);
+    }
+}
 
         frame.add(oyunPaneli, BorderLayout.CENTER);
        oyunPaneli.setBackground(Color.gray);
@@ -155,7 +157,7 @@ updateKullaniciBilgileri(kullaniciTakmaAdiValue, adValue, soyadValue, paraValue,
     try {
         stmt = conn.createStatement();
         rs = stmt.executeQuery("SELECT kullanici_takma_adi, kullanici_adi, kullanici_soyadi, kullanici_para_miktari, kullanici_esya_miktari, kullanici_yemek_miktari FROM oyuncular");
-        while (rs.next()) { 
+        while (rs.next()) { // Tüm kayıtları döngüyle getirebilmek için
             String kullaniciTakmaAdi = rs.getString("kullanici_takma_adi");
             String ad = rs.getString("kullanici_adi");
             String soyad = rs.getString("kullanici_soyadi");
@@ -163,12 +165,68 @@ updateKullaniciBilgileri(kullaniciTakmaAdiValue, adValue, soyadValue, paraValue,
             int esyaMiktari = rs.getInt("kullanici_esya_miktari");
             int yemekMiktari = rs.getInt("kullanici_yemek_miktari");
 
-            kullaniciTakmaAdiValue.setText(kullaniciTakmaAdi);
-            adValue.setText(ad);
-            soyadValue.setText(soyad);
-            paraValue.setText(String.valueOf(para));
-            esyaValue.setText(String.valueOf(esyaMiktari));
-            yemekValue.setText(String.valueOf(yemekMiktari));
+
+            // Etiketleri panele ekleyin
+         // Kullanıcı bilgi etiket paneli
+JPanel kullaniciBilgiEtiketPaneli = new JPanel();
+kullaniciBilgiEtiketPaneli.setLayout(new GridBagLayout());
+GridBagConstraints constraints = new GridBagConstraints();
+constraints.anchor = GridBagConstraints.WEST;
+constraints.insets.bottom = 5;
+
+// Etiketleri panele ekleyin
+constraints.gridx = 0;
+constraints.gridy = 0;
+kullaniciBilgiEtiketPaneli.add(new JLabel("Kullanıcı Takma Adı:"+kullaniciTakmaAdi), constraints);
+
+constraints.gridx = 1;
+constraints.gridy = 0;
+kullaniciBilgiEtiketPaneli.add(kullaniciTakmaAdiValue, constraints);
+
+constraints.gridx = 0;
+constraints.gridy = 1;
+kullaniciBilgiEtiketPaneli.add(new JLabel("Adı:"+ad), constraints);
+
+constraints.gridx = 1;
+constraints.gridy = 1;
+kullaniciBilgiEtiketPaneli.add(adValue, constraints);
+
+constraints.gridx = 0;
+constraints.gridy = 2;
+kullaniciBilgiEtiketPaneli.add(new JLabel("Soyadı:"+soyad), constraints);
+
+constraints.gridx = 1;
+constraints.gridy = 2;
+kullaniciBilgiEtiketPaneli.add(soyadValue, constraints);
+
+constraints.gridx = 0;
+constraints.gridy = 3;
+kullaniciBilgiEtiketPaneli.add(new JLabel("Para:"+para), constraints);
+
+constraints.gridx = 1;
+constraints.gridy = 3;
+kullaniciBilgiEtiketPaneli.add(paraValue, constraints);
+
+constraints.gridx = 0;
+constraints.gridy = 4;
+kullaniciBilgiEtiketPaneli.add(new JLabel("Eşya Miktarı:"+esyaMiktari), constraints);
+
+constraints.gridx = 1;
+constraints.gridy = 4;
+kullaniciBilgiEtiketPaneli.add(esyaValue, constraints);
+
+constraints.gridx = 0;
+constraints.gridy = 5;
+kullaniciBilgiEtiketPaneli.add(new JLabel("Yemek Miktarı:"+yemekMiktari), constraints);
+
+constraints.gridx = 1;
+constraints.gridy = 5;
+kullaniciBilgiEtiketPaneli.add(yemekValue, constraints);
+
+// Kullanıcı bilgileri paneline etiket panelini ekleyin
+
+kullaniciBilgileriPaneli.add(kullaniciBilgiEtiketPaneli);
+
         }
     } catch (SQLException e) {
         e.printStackTrace();
@@ -185,5 +243,5 @@ updateKullaniciBilgileri(kullaniciTakmaAdiValue, adValue, soyadValue, paraValue,
 }
 
 
+
 }
-  
