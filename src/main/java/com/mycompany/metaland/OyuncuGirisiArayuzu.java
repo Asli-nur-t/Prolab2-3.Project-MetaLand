@@ -59,6 +59,8 @@ public class OyuncuGirisiArayuzu extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 MetalanGirisSayfasi girisSayfasi = new MetalanGirisSayfasi();
                 girisSayfasi.setVisible(true);
+                              
+
                 dispose();
             }
         });
@@ -124,10 +126,11 @@ public class OyuncuGirisiArayuzu extends JFrame {
         stmt.setString(4, kullaniciSifre);
         stmt.executeUpdate();
 
-        JOptionPane.showMessageDialog(this, "Oyuncu başarıyla eklendi.");
+        JOptionPane.showMessageDialog(this, "Kayıt başarılı.");
+         new OyunArayuzu();
 
-        MetalanGirisSayfasi girisSayfasi = new MetalanGirisSayfasi();
-        girisSayfasi.setVisible(true);
+       // MetalanGirisSayfasi girisSayfasi = new MetalanGirisSayfasi();
+       // girisSayfasi.setVisible(true);
         dispose();
     } catch (SQLException e) {
         JOptionPane.showMessageDialog(this, "Veritabanı hatası: " + e.getMessage());
