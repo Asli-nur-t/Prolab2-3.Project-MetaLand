@@ -1,7 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
+
 package com.mycompany.metaland;
 
 /**
@@ -15,13 +13,14 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class OyuncuGirisiArayuzu extends JFrame {
     private JLabel adLabel, soyadLabel, takmaAdLabel, sifreLabel;
     private JTextField adField, soyadField, takmaAdField;
     private JPasswordField sifreField;
-    private JButton kaydetButton, geriButton;
+    private JButton kaydetButton, girisButton, geriButton;
 
     public OyuncuGirisiArayuzu() {
         adLabel = new JLabel("Ad:");
@@ -33,8 +32,8 @@ public class OyuncuGirisiArayuzu extends JFrame {
         takmaAdField = new JTextField(20);
         sifreField = new JPasswordField(20);
         kaydetButton = new JButton("Kaydet");
+        girisButton = new JButton("Giriş");
         geriButton = new JButton("Geri");
-        
 
         kaydetButton.addActionListener(new ActionListener() {
             @Override
@@ -43,14 +42,42 @@ public class OyuncuGirisiArayuzu extends JFrame {
                 String soyad = soyadField.getText();
                 String takmaAd = takmaAdField.getText();
                 String sifre = new String(sifreField.getPassword());
-                
-                 if (ad.isEmpty() || soyad.isEmpty() || takmaAd.isEmpty()|| sifre.isEmpty()) {
-            JOptionPane.showMessageDialog(OyuncuGirisiArayuzu.this, "Lütfen tüm alanları doldurun.");
-                     System.out.println("alanlar doldurulmadı hata");
-        } else{
-            veritabaninaOyuncuEkle(ad, soyad, takmaAd, sifre);    
-                 }
 
+                if (ad.isEmpty() || soyad.isEmpty() || takmaAd.isEmpty() || sifre.isEmpty()) {
+                    JOptionPane.showMessageDialog(OyuncuGirisiArayuzu.this, "Lütfen tüm alanları doldurun.");
+                } else {
+                    boolean kayitBasarili = veritabaninaOyuncuEkle(ad, soyad, takmaAd, sifre);
+                    if (kayitBasarili) {
+                        JOptionPane.showMessageDialog(OyuncuGirisiArayuzu.this, "Kayıt başarılı.");
+                        adField.setText("");
+                        soyadField.setText("");
+                        takmaAdField.setText("");
+                        sifreField.setText("");
+                    } else {
+                        JOptionPane.showMessageDialog(OyuncuGirisiArayuzu.this, "Kayıt başarısız. Bu takma ad zaten kullanılıyor.");
+                    }
+                }
+            }
+        });
+
+        girisButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String takmaAd = takmaAdField.getText();
+                String sifre = new String(sifreField.getPassword());
+
+                if (takmaAd.isEmpty() || sifre.isEmpty()) {
+                    JOptionPane.showMessageDialog(OyuncuGirisiArayuzu.this, "Lütfen tüm alanları doldurun.");
+                } else {
+                    boolean girisBasarili = kullaniciGirisiniKontrolEt(takmaAd, sifre);
+                    if (girisBasarili) {
+                        JOptionPane.showMessageDialog(OyuncuGirisiArayuzu.this, "Giriş başarılı.");
+                        new OyunArayuzu();
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(OyuncuGirisiArayuzu.this, "Giriş başarısız. Geçersiz takma ad veya şifre.");
+                    }
+                }
             }
         });
 
@@ -59,15 +86,13 @@ public class OyuncuGirisiArayuzu extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 MetalanGirisSayfasi girisSayfasi = new MetalanGirisSayfasi();
                 girisSayfasi.setVisible(true);
-                              
-
                 dispose();
             }
         });
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-         gbc.gridx = 0;
+        gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 10, 10, 10);
         add(adLabel, gbc);
@@ -98,11 +123,15 @@ public class OyuncuGirisiArayuzu extends JFrame {
 
         gbc.gridx = 0;
         gbc.gridy = 4;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
         add(kaydetButton, gbc);
 
+        gbc.gridx = 1;
+        add(girisButton, gbc);
+
+        gbc.gridx = 0;
         gbc.gridy = 5;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
         add(geriButton, gbc);
 
         setTitle("Oyuncu Girişi");
@@ -112,30 +141,55 @@ public class OyuncuGirisiArayuzu extends JFrame {
         setResizable(false);
     }
 
-   private void veritabaninaOyuncuEkle(String ad, String soyad, String takmaAd, String kullaniciSifre) {
-    String url = "jdbc:mysql://localhost:3306/metaland";
-    String kullanici = "root";
-    String sifre = "Qwertyu@123";
+    private boolean veritabaninaOyuncuEkle(String ad, String soyad, String takmaAd, String kullaniciSifre) {
+        String url = "jdbc:mysql://localhost:3306/metaland";
+        String kullanici = "root";
+        String sifre = "Qwertyu@123";
 
-    try (Connection conn = DriverManager.getConnection(url, kullanici, sifre)) {
-        String sql = "INSERT INTO oyuncular (kullanici_adi, kullanici_soyadi, kullanici_takma_adi, kullanici_sifresi) VALUES (?, ?, ?, ?)";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1, ad);
-        stmt.setString(2, soyad);
-        stmt.setString(3, takmaAd);
-        stmt.setString(4, kullaniciSifre);
-        stmt.executeUpdate();
+        try (Connection conn = DriverManager.getConnection(url, kullanici, sifre)) {
+            String sql = "SELECT * FROM oyuncular WHERE kullanici_takma_adi = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, takmaAd);
+            ResultSet rs = stmt.executeQuery();
 
-        JOptionPane.showMessageDialog(this, "Kayıt başarılı.");
-         new OyunArayuzu();
+            if (rs.next()) {
+                return false; // Kayıt başarısız, takma ad zaten kullanılıyor.
+            } else {
+                sql = "INSERT INTO oyuncular (kullanici_adi, kullanici_soyadi, kullanici_takma_adi, kullanici_sifresi) VALUES (?, ?, ?, ?)";
+                stmt = conn.prepareStatement(sql);
+                stmt.setString(1, ad);
+                stmt.setString(2, soyad);
+                stmt.setString(3, takmaAd);
+                stmt.setString(4, kullaniciSifre);
+                stmt.executeUpdate();
+                return true; // Kayıt başarılı
+            }
 
-       // MetalanGirisSayfasi girisSayfasi = new MetalanGirisSayfasi();
-       // girisSayfasi.setVisible(true);
-        dispose();
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Veritabanı hatası: " + e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Veritabanı hatası: " + e.getMessage());
+        }
+        return false; // Kayıt başarısız
     }
-}
+
+    private boolean kullaniciGirisiniKontrolEt(String takmaAd, String sifre) {
+        String url = "jdbc:mysql://localhost:3306/metaland";
+        String kullanici = "root";
+         sifre = "Qwertyu@123";
+
+        try (Connection conn = DriverManager.getConnection(url, kullanici, sifre)) {
+            String sql = "SELECT * FROM oyuncular WHERE kullanici_takma_adi = ? AND kullanici_sifresi = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, takmaAd);
+            stmt.setString(2, sifre);
+            ResultSet rs = stmt.executeQuery();
+
+            return rs.next(); // Eşleşme varsa true, yoksa false döner
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Veritabanı hatası: " + e.getMessage());
+        }
+        return false; // Giriş başarısız
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -147,5 +201,3 @@ public class OyuncuGirisiArayuzu extends JFrame {
         });
     }
 }
-
-
