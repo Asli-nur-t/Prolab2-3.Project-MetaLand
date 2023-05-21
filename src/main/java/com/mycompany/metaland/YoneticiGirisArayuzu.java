@@ -110,9 +110,26 @@ public class YoneticiGirisArayuzu extends JFrame {
                     
                     updateComboBoxes(connection);
                     
+
+                    
                     
                     
                     //*******buton işlemleri**********
+                    
+                    
+                    comboBoxTable.addActionListener(new ActionListener() {
+                     @Override
+                     public void actionPerformed(ActionEvent e) {
+                       String selectedTable = (String) comboBoxTable.getSelectedItem();
+                          try {
+                          updateColumnComboBox(connection, selectedTable);
+                            } catch (SQLException ex) {
+                        textArea.append("Sütun güncelleme hatası: " + ex.getMessage() + "\n");
+                         Logger.getLogger(YoneticiGirisArayuzu.class.getName()).log(Level.SEVERE, null, ex);
+                           }
+                          }
+                        });
+
 
                     
                     
@@ -193,7 +210,7 @@ public class YoneticiGirisArayuzu extends JFrame {
         }
         comboBoxTable.setModel(new DefaultComboBoxModel<>(tableNames.toArray(new String[0])));
 
-        // Sütun seçeneklerini güncelle
+       /* // Sütun seçeneklerini güncelle
         String selectedTable = (String) comboBoxTable.getSelectedItem();
     ResultSet columns = metaData.getColumns(null, null, selectedTable, null);
     ArrayList<String> columnNames = new ArrayList<>();
@@ -202,7 +219,22 @@ public class YoneticiGirisArayuzu extends JFrame {
         columnNames.add(columnName);
     }
     comboBoxColumn.setModel(new DefaultComboBoxModel<>(columnNames.toArray(new String[0])));
+    */
+    
+    
     }
+    
+    private void updateColumnComboBox(Connection connection, String selectedTable) throws SQLException {
+    DatabaseMetaData metaData = connection.getMetaData();
+    ResultSet columns = metaData.getColumns(null, null, selectedTable, null);
+    ArrayList<String> columnNames = new ArrayList<>();
+    while (columns.next()) {
+        String columnName = columns.getString("COLUMN_NAME");
+        columnNames.add(columnName);
+    }
+    comboBoxColumn.setModel(new DefaultComboBoxModel<>(columnNames.toArray(new String[0])));
+}
+
 
     private void Guncelle(Connection connection, String table, String column, String newValue) {
         try {
