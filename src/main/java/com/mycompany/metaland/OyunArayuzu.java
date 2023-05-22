@@ -46,8 +46,10 @@ public class OyunArayuzu {
     private Connection conn;
     private Statement stmt;
     private ResultSet rs;
-
+    static int sayac=0;
     public OyunArayuzu() {
+        
+        
         frame = new JFrame("Oyun Arayüzü");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -56,15 +58,18 @@ public class OyunArayuzu {
         frame.setLayout(new BorderLayout());
 
        durumPaneli = new JPanel();
-durumPaneli.setPreferredSize(new Dimension(100, 50));
-durumPaneli.setBackground(Color.CYAN);
+        durumPaneli.setPreferredSize(new Dimension(100, 50));
+        durumPaneli.setBackground(Color.CYAN);
 
-frame.add(durumPaneli, BorderLayout.SOUTH);
+        frame.add(durumPaneli, BorderLayout.SOUTH);
 
+        
      
 
         oyunPaneli = new JPanel();
         oyunPaneli.setLayout(new GridLayout(gridBoyutu, gridBoyutu));
+        
+        //****** ön plandaki şehir düzeni resmi *********
        
         ImageIcon backgroundImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/citybackG.jpeg");
         JLabel backgroundLabel = new JLabel(backgroundImage);
@@ -73,7 +78,7 @@ frame.add(durumPaneli, BorderLayout.SOUTH);
 
         
         
-        // Veritabanı bağlantısını kur
+        // ********* Veritabanı bağlantısı ******
     try {
         conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/metaland", "root", "Qwertyu@123");
     } catch (SQLException e) {
@@ -100,16 +105,18 @@ JLabel yemekValue = new JLabel("-");
 updateKullaniciBilgileri(kullaniciTakmaAdiValue, adValue, soyadValue, paraValue, esyaValue, yemekValue);
 
 
-//kullanılacak butonlar******
+
 
       satinAl = new JButton("Arazi Satın Al");
        satinAl.setPreferredSize(new Dimension(200,50));
        durumPaneli.add(satinAl);
        durumPaneli.setLayout(new BorderLayout()); 
        durumPaneli.add(satinAl, BorderLayout.SOUTH); 
+       //herhangi bir kullanıcı takma adına basılana kadar görünmez
+       satinAl.setVisible(false);
         
        
-//**********arazi düzeni*************************
+//**********  arka plandaki butonlu arazi düzeni  *************************
 
        araziButonlari = new JButton[gridBoyutu][gridBoyutu];
 cimIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/OyunArayuzu/src/images/grass.png");
@@ -174,88 +181,96 @@ for (int i = 0; i < gridBoyutu; i++) {
             int yemekMiktari = rs.getInt("kullanici_yemek_miktari");
 
 
-            // Etiketleri panele ekleyin
          // Kullanıcı bilgi etiket paneli
-JPanel kullaniciBilgiEtiketPaneli = new JPanel();
-kullaniciBilgiEtiketPaneli.setLayout(new GridBagLayout());
-GridBagConstraints constraints = new GridBagConstraints();
-constraints.anchor = GridBagConstraints.WEST;
-constraints.insets.bottom = 5;
+            JPanel kullaniciBilgiEtiketPaneli = new JPanel();
+            kullaniciBilgiEtiketPaneli.setLayout(new GridBagLayout());
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.anchor = GridBagConstraints.WEST;
+            constraints.insets.bottom = 5;
 
-oyuncuBilgiButonu= new JButton();
-oyuncuBilgiButonu.setBackground(Color.cyan);
-oyuncuBilgiButonu.setOpaque(true);
-oyuncuBilgiButonu.setBorderPainted(false);
+            oyuncuBilgiButonu= new JButton();
+            oyuncuBilgiButonu.setBackground(Color.cyan);
+            oyuncuBilgiButonu.setOpaque(true);
+            oyuncuBilgiButonu.setBorderPainted(false);
+            
+            oyuncuBilgiButonu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Oyuncubilgibutonuna basılması arazi satın alma butonunun görünmesini tetiklemeli bu şekilde mal varlığı güncellenecek
+                sayac++;
+                if(sayac%2==1)
+                 satinAl.setVisible(true);
+                else satinAl.setVisible(false);
+                
+            }
+        });
 
-// Etiketleri panele ekleyin
-constraints.gridx = 0;
-constraints.gridy = 0;
-oyuncuBilgiButonu.add(new JLabel("Takma Ad:"+kullaniciTakmaAdi), constraints);
-kullaniciBilgiEtiketPaneli.add(oyuncuBilgiButonu, constraints);
+                // Etiketleri panele ekleme ve konumlandırma
+                constraints.gridx = 0;
+                constraints.gridy = 0;
+                oyuncuBilgiButonu.add(new JLabel(""+kullaniciTakmaAdi), constraints);
+                kullaniciBilgiEtiketPaneli.add(oyuncuBilgiButonu, constraints);
 
-constraints.gridx = 1;
-constraints.gridy = 0;
-kullaniciBilgiEtiketPaneli.add(kullaniciTakmaAdiValue, constraints);
+                constraints.gridx = 1;
+                constraints.gridy = 0;
+                kullaniciBilgiEtiketPaneli.add(kullaniciTakmaAdiValue, constraints);
 
-constraints.gridx = 0;
-constraints.gridy = 1;
-kullaniciBilgiEtiketPaneli.add(new JLabel("Adı:"+ad), constraints);
+                constraints.gridx = 0;
+                constraints.gridy = 1;
+                kullaniciBilgiEtiketPaneli.add(new JLabel("Adı:"+ad), constraints);
 
-constraints.gridx = 0;
-constraints.gridy = 1;
-kullaniciBilgiEtiketPaneli.add(adValue, constraints);
+                constraints.gridx = 0;
+                constraints.gridy = 1;
+                kullaniciBilgiEtiketPaneli.add(adValue, constraints);
 
-constraints.gridx = 0;
-constraints.gridy = 2;
-kullaniciBilgiEtiketPaneli.add(new JLabel("Soyadı:"+soyad), constraints);
+                constraints.gridx = 0;
+                constraints.gridy = 2;
+                kullaniciBilgiEtiketPaneli.add(new JLabel("Soyadı:"+soyad), constraints);
 
-constraints.gridx = 0;
-constraints.gridy = 2;
-kullaniciBilgiEtiketPaneli.add(soyadValue, constraints);
+                constraints.gridx = 0;
+                constraints.gridy = 2;
+                kullaniciBilgiEtiketPaneli.add(soyadValue, constraints);
 
-constraints.gridx = 0;
-constraints.gridy = 3;
-kullaniciBilgiEtiketPaneli.add(new JLabel("Para:"+para), constraints);
+                constraints.gridx = 0;
+                constraints.gridy = 3;
+                kullaniciBilgiEtiketPaneli.add(new JLabel("Para:"+para), constraints);
 
-constraints.gridx = 0;
-constraints.gridy = 3;
-kullaniciBilgiEtiketPaneli.add(paraValue, constraints);
+                constraints.gridx = 0;
+                constraints.gridy = 3;
+                kullaniciBilgiEtiketPaneli.add(paraValue, constraints);
 
-constraints.gridx = 0;
-constraints.gridy = 4;
-kullaniciBilgiEtiketPaneli.add(new JLabel("Eşya Miktarı:"+esyaMiktari), constraints);
+                constraints.gridx = 0;
+                constraints.gridy = 4;
+                kullaniciBilgiEtiketPaneli.add(new JLabel("Eşya Miktarı:"+esyaMiktari), constraints);
 
-constraints.gridx = 0;
-constraints.gridy = 4;
-kullaniciBilgiEtiketPaneli.add(esyaValue, constraints);
+                constraints.gridx = 0;
+                constraints.gridy = 4;
+                kullaniciBilgiEtiketPaneli.add(esyaValue, constraints);
 
-constraints.gridx = 0;
-constraints.gridy = 5;
-kullaniciBilgiEtiketPaneli.add(new JLabel("Yemek Miktarı:"+yemekMiktari), constraints);
+                constraints.gridx = 0;
+                constraints.gridy = 5;
+                kullaniciBilgiEtiketPaneli.add(new JLabel("Yemek Miktarı:"+yemekMiktari), constraints);
 
-constraints.gridx = 0;
-constraints.gridy = 5;
-kullaniciBilgiEtiketPaneli.add(yemekValue, constraints);
+                constraints.gridx = 0;
+                constraints.gridy = 5;
+                kullaniciBilgiEtiketPaneli.add(yemekValue, constraints);
 
-// Kullanıcı bilgileri paneline etiket panelini ekleyin
+                    // Kullanıcı bilgileri paneline etiket panelini ekleyin
 
-kullaniciBilgileriPaneli.add(kullaniciBilgiEtiketPaneli);
+                kullaniciBilgileriPaneli.add(kullaniciBilgiEtiketPaneli);
 
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    } finally {
-        try {
-            if (rs != null)
-                rs.close();
-            if (stmt != null)
-                stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-
-
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            if (rs != null)
+                                rs.close();
+                             if (stmt != null)
+                                stmt.close();
+                                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
 }
