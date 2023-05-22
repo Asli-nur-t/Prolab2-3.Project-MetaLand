@@ -184,8 +184,9 @@ constraints.insets.bottom = 5;
 
 oyuncuBilgiButonu= new JButton();
 oyuncuBilgiButonu.setBackground(Color.cyan);
-//oyuncuBilgiButonu.setOpaque(true);
+oyuncuBilgiButonu.setOpaque(true);
 oyuncuBilgiButonu.setBorderPainted(false);
+
 // Etiketleri panele ekleyin
 constraints.gridx = 0;
 constraints.gridy = 0;
@@ -200,7 +201,7 @@ constraints.gridx = 0;
 constraints.gridy = 1;
 kullaniciBilgiEtiketPaneli.add(new JLabel("Adı:"+ad), constraints);
 
-constraints.gridx = 1;
+constraints.gridx = 0;
 constraints.gridy = 1;
 kullaniciBilgiEtiketPaneli.add(adValue, constraints);
 
@@ -208,7 +209,7 @@ constraints.gridx = 0;
 constraints.gridy = 2;
 kullaniciBilgiEtiketPaneli.add(new JLabel("Soyadı:"+soyad), constraints);
 
-constraints.gridx = 1;
+constraints.gridx = 0;
 constraints.gridy = 2;
 kullaniciBilgiEtiketPaneli.add(soyadValue, constraints);
 
@@ -216,7 +217,7 @@ constraints.gridx = 0;
 constraints.gridy = 3;
 kullaniciBilgiEtiketPaneli.add(new JLabel("Para:"+para), constraints);
 
-constraints.gridx = 1;
+constraints.gridx = 0;
 constraints.gridy = 3;
 kullaniciBilgiEtiketPaneli.add(paraValue, constraints);
 
@@ -224,7 +225,7 @@ constraints.gridx = 0;
 constraints.gridy = 4;
 kullaniciBilgiEtiketPaneli.add(new JLabel("Eşya Miktarı:"+esyaMiktari), constraints);
 
-constraints.gridx = 1;
+constraints.gridx = 0;
 constraints.gridy = 4;
 kullaniciBilgiEtiketPaneli.add(esyaValue, constraints);
 
@@ -232,7 +233,7 @@ constraints.gridx = 0;
 constraints.gridy = 5;
 kullaniciBilgiEtiketPaneli.add(new JLabel("Yemek Miktarı:"+yemekMiktari), constraints);
 
-constraints.gridx = 1;
+constraints.gridx = 0;
 constraints.gridy = 5;
 kullaniciBilgiEtiketPaneli.add(yemekValue, constraints);
 
