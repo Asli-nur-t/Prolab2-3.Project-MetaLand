@@ -30,7 +30,9 @@ import javax.swing.SwingUtilities;
  */
 
 public class OyunArayuzu {
-
+    private final ImageIcon backgroundImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/citybackG.jpeg");
+    private final JLabel backgroundLabel = new JLabel(backgroundImage);
+        
     private final JFrame frame;
     private final JPanel durumPaneli;
     private final JPanel oyunPaneli;
@@ -74,6 +76,8 @@ public class OyunArayuzu {
         ImageIcon backgroundImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/citybackG.jpeg");
         JLabel backgroundLabel = new JLabel(backgroundImage);
         backgroundLabel.setBounds(0, 0, 1000, 800);
+        
+        backgroundLabel.setVisible(true);
         frame.add(backgroundLabel);
 
         
@@ -114,6 +118,17 @@ updateKullaniciBilgileri(kullaniciTakmaAdiValue, adValue, soyadValue, paraValue,
        durumPaneli.add(satinAl, BorderLayout.SOUTH); 
        //herhangi bir kullanıcı takma adına basılana kadar görünmez
        satinAl.setVisible(false);
+       satinAl.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                 new HangiIsletme();
+                  if(HangiIsletme.secim==1)System.out.println("emlak seçildi");
+                  else if(HangiIsletme.secim==2)System.out.println("mağaza seçildi");
+                  else if(HangiIsletme.secim==3)System.out.println("market seçildi");
+              
+            }
+        });
         
        
 //**********  arka plandaki butonlu arazi düzeni  *************************
@@ -122,21 +137,30 @@ updateKullaniciBilgileri(kullaniciTakmaAdiValue, adValue, soyadValue, paraValue,
 cimIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/OyunArayuzu/src/images/grass.png");
 digerResimIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/grass1.png");
 
+
+oyunPaneli.add(backgroundLabel, BorderLayout.CENTER);
 for (int i = 0; i < gridBoyutu; i++) {
     for (int j = 0; j < gridBoyutu; j++) {
         araziButonlari[i][j] = new JButton();
         araziButonlari[i][j].setPreferredSize(new Dimension(25, 25));
-        araziButonlari[i][j].setIcon(cimIcon);
+       // araziButonlari[i][j].setIcon(cimIcon);
         araziButonlari[i][j].setContentAreaFilled(false);
         araziButonlari[i][j].setBorderPainted(false);
         araziButonlari[i][j].setOpaque(false);
-        araziButonlari[i][j].setForeground(new Color(255, 255, 255, 128));
+       // araziButonlari[i][j].setForeground(new Color(255, 255, 255, 128));
         araziButonlari[i][j].addActionListener(new ButtonActive(i, j));
         oyunPaneli.add(araziButonlari[i][j]);
+        backgroundLabel.setVisible(true);
     }
 }
-
+        oyunPaneli.setOpaque(false);
+        oyunPaneli.add(backgroundLabel, BorderLayout.CENTER);
+        backgroundLabel.setBounds(0, 0, 1000, 800);
+        backgroundLabel.setVisible(true);
+        frame.add(backgroundLabel);
         frame.add(oyunPaneli, BorderLayout.CENTER);
+        backgroundLabel.setVisible(true);
+        
        oyunPaneli.setBackground(Color.gray);
         frame.setVisible(true);
     }
@@ -147,10 +171,13 @@ for (int i = 0; i < gridBoyutu; i++) {
         private final int satir;
         private final int sutun;
         private boolean digerResimGosteriliyor;
+        
 
         public ButtonActive(int satir, int sutun) {
             this.satir = satir;
             this.sutun = sutun;
+            
+            oyunPaneli.add(backgroundLabel, BorderLayout.CENTER);
             this.digerResimGosteriliyor = false;
         }
 
@@ -159,6 +186,7 @@ for (int i = 0; i < gridBoyutu; i++) {
                 araziButonlari[satir][sutun].setIcon(cimIcon);
             } else {
                 araziButonlari[satir][sutun].setIcon(digerResimIcon);
+                oyunPaneli.setOpaque(true);
             }
 
             digerResimGosteriliyor = !digerResimGosteriliyor;
