@@ -41,7 +41,7 @@ public class OyunArayuzu {
     private final ImageIcon digerResimIcon;
     private JPanel kullaniciBilgileriPaneli = new JPanel();
 
-
+    static JButton oyuncuBilgiButonu;
     
     private Connection conn;
     private Statement stmt;
@@ -182,10 +182,15 @@ GridBagConstraints constraints = new GridBagConstraints();
 constraints.anchor = GridBagConstraints.WEST;
 constraints.insets.bottom = 5;
 
+oyuncuBilgiButonu= new JButton();
+oyuncuBilgiButonu.setBackground(Color.cyan);
+//oyuncuBilgiButonu.setOpaque(true);
+oyuncuBilgiButonu.setBorderPainted(false);
 // Etiketleri panele ekleyin
 constraints.gridx = 0;
 constraints.gridy = 0;
-kullaniciBilgiEtiketPaneli.add(new JLabel("Kullanıcı Takma Adı:"+kullaniciTakmaAdi), constraints);
+oyuncuBilgiButonu.add(new JLabel("Takma Ad:"+kullaniciTakmaAdi), constraints);
+kullaniciBilgiEtiketPaneli.add(oyuncuBilgiButonu, constraints);
 
 constraints.gridx = 1;
 constraints.gridy = 0;

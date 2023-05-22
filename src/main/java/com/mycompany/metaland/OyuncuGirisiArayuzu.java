@@ -72,7 +72,7 @@ public class OyuncuGirisiArayuzu extends JFrame {
                     boolean girisBasarili = kullaniciGirisiniKontrolEt(takmaAd, sifre);
                     if (girisBasarili) {
                         JOptionPane.showMessageDialog(OyuncuGirisiArayuzu.this, "Giriş başarılı.");
-                        new OyunArayuzu();
+                       // new OyunArayuzu();
                         dispose();
                     } else {
                         JOptionPane.showMessageDialog(OyuncuGirisiArayuzu.this, "Giriş başarısız. Geçersiz takma ad veya şifre.");
