@@ -30,8 +30,8 @@ import javax.swing.SwingUtilities;
  */
 
 public class OyunArayuzu {
-    private final ImageIcon backgroundImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/citybackG.jpeg");
-    private final JLabel backgroundLabel = new JLabel(backgroundImage);
+    ImageIcon backgroundImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/citybackG.jpeg");
+    JLabel backgroundLabel = new JLabel(backgroundImage);
         
     private final JFrame frame;
     private final JPanel durumPaneli;
@@ -143,17 +143,17 @@ for (int i = 0; i < gridBoyutu; i++) {
     for (int j = 0; j < gridBoyutu; j++) {
         araziButonlari[i][j] = new JButton();
         araziButonlari[i][j].setPreferredSize(new Dimension(25, 25));
-       // araziButonlari[i][j].setIcon(cimIcon);
+        araziButonlari[i][j].setIcon(cimIcon);
         araziButonlari[i][j].setContentAreaFilled(false);
         araziButonlari[i][j].setBorderPainted(false);
         araziButonlari[i][j].setOpaque(false);
-       // araziButonlari[i][j].setForeground(new Color(255, 255, 255, 128));
+        araziButonlari[i][j].setForeground(new Color(255, 255, 255, 128));
         araziButonlari[i][j].addActionListener(new ButtonActive(i, j));
         oyunPaneli.add(araziButonlari[i][j]);
         backgroundLabel.setVisible(true);
     }
 }
-        oyunPaneli.setOpaque(false);
+        
         oyunPaneli.add(backgroundLabel, BorderLayout.CENTER);
         backgroundLabel.setBounds(0, 0, 1000, 800);
         backgroundLabel.setVisible(true);
@@ -186,7 +186,6 @@ for (int i = 0; i < gridBoyutu; i++) {
                 araziButonlari[satir][sutun].setIcon(cimIcon);
             } else {
                 araziButonlari[satir][sutun].setIcon(digerResimIcon);
-                oyunPaneli.setOpaque(true);
             }
 
             digerResimGosteriliyor = !digerResimGosteriliyor;
