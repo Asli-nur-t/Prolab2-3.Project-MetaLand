@@ -4,6 +4,7 @@
  */
 package com.mycompany.metaland;
 
+import static com.mycompany.metaland.HangiIsletme.secim;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,10 +18,12 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -29,10 +32,27 @@ import javax.swing.SwingUtilities;
  * @author aslinurtopcu
  */
 
+
 public class OyunArayuzu {
     ImageIcon backgroundImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/citybackG.jpeg");
     JLabel backgroundLabel = new JLabel(backgroundImage);
+    
+    ImageIcon asphaltImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/asphalt.jpeg");
+    JLabel asphaltLabel = new JLabel(asphaltImage);
+    
+    ImageIcon asphaltImage2 = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/asphalt3.jpeg");
+    JLabel asphaltLabel2 = new JLabel(asphaltImage2);
+    
+    ImageIcon shopImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/shop2.png");
+    JLabel shopLabell = new JLabel(shopImage);
+    
+    ImageIcon emlakImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/emlak.png");
+    JLabel emlakLabel = new JLabel(emlakImage);
+    
+    ImageIcon marketImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/shop.png");
+    JLabel marketLabel = new JLabel(marketImage);
         
+    
     private final JFrame frame;
     private final JPanel durumPaneli;
     private final JPanel oyunPaneli;
@@ -59,7 +79,7 @@ public class OyunArayuzu {
 
         frame.setLayout(new BorderLayout());
 
-       durumPaneli = new JPanel();
+        durumPaneli = new JPanel();
         durumPaneli.setPreferredSize(new Dimension(100, 50));
         durumPaneli.setBackground(Color.CYAN);
 
@@ -70,6 +90,8 @@ public class OyunArayuzu {
 
         oyunPaneli = new JPanel();
         oyunPaneli.setLayout(new GridLayout(gridBoyutu, gridBoyutu));
+        int[][] araziButonlariMatrisi = new int[gridBoyutu][gridBoyutu];
+
         
         //****** ön plandaki şehir düzeni resmi *********
        
@@ -110,8 +132,41 @@ updateKullaniciBilgileri(kullaniciTakmaAdiValue, adValue, soyadValue, paraValue,
 
 
 
+JButton yatayYol = new JButton("yatay yol");
+        yatayYol.setBounds(50, 500, 100, 50);
+        yatayYol.setForeground(Color.WHITE);
+        yatayYol.setBackground(Color.pink);
+        yatayYol.setOpaque(true);
+        yatayYol.setBorderPainted(false);
+        yatayYol.addActionListener(e -> {
+            //JOptionPane.showMessageDialog(null, "yatay yol seçildi");
+            
+            secim=4;
+           
+        });
+       
+        kullaniciBilgiEtiketPaneli.add(yatayYol);
+        
+         
+        JButton dikeyYol = new JButton("dikey yol");
+        dikeyYol.setBounds(200, 500, 100, 50);
+        dikeyYol.setForeground(Color.WHITE);
+        dikeyYol.setBackground(Color.pink);
+        dikeyYol.setOpaque(true);
+        dikeyYol.setBorderPainted(false);
+        
+        dikeyYol.addActionListener(e -> {
+            //JOptionPane.showMessageDialog(null, "dikey yol seçildi");
+           
 
-      satinAl = new JButton("Arazi Satın Al");
+            secim=5;
+           
+        });
+        kullaniciBilgiEtiketPaneli.add(dikeyYol);
+        
+
+
+       satinAl = new JButton("Arazi Satın Al");
        satinAl.setPreferredSize(new Dimension(200,50));
        durumPaneli.add(satinAl);
        durumPaneli.setLayout(new BorderLayout()); 
@@ -126,6 +181,7 @@ updateKullaniciBilgileri(kullaniciTakmaAdiValue, adValue, soyadValue, paraValue,
                   if(HangiIsletme.secim==1)System.out.println("emlak seçildi");
                   else if(HangiIsletme.secim==2)System.out.println("mağaza seçildi");
                   else if(HangiIsletme.secim==3)System.out.println("market seçildi");
+                   frame.add(backgroundLabel);
               
             }
         });
@@ -141,9 +197,25 @@ digerResimIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/im
 oyunPaneli.add(backgroundLabel, BorderLayout.CENTER);
 for (int i = 0; i < gridBoyutu; i++) {
     for (int j = 0; j < gridBoyutu; j++) {
+        
+       //  araziButonlariMatrisi[i][j] = 0;
+         
         araziButonlari[i][j] = new JButton();
         araziButonlari[i][j].setPreferredSize(new Dimension(25, 25));
-        araziButonlari[i][j].setIcon(cimIcon);
+        //araziButonlari[i][j].setIcon(cimIcon);
+         if (i % 3 == 0) {
+            araziButonlari[i][j].setIcon(asphaltImage2);
+        } 
+         else if(j % 3
+                 
+                 
+                 
+                 == 0){
+             //araziButonlari[i][j].setIcon(asphaltImage);
+         }
+         else  {
+            araziButonlari[i][j].setIcon(cimIcon);
+        }
         araziButonlari[i][j].setContentAreaFilled(false);
         araziButonlari[i][j].setBorderPainted(false);
         araziButonlari[i][j].setOpaque(false);
@@ -185,7 +257,23 @@ for (int i = 0; i < gridBoyutu; i++) {
             if (digerResimGosteriliyor) {
                 araziButonlari[satir][sutun].setIcon(cimIcon);
             } else {
-                araziButonlari[satir][sutun].setIcon(digerResimIcon);
+                if(HangiIsletme.secim==1){
+                    
+                    araziButonlari[satir][sutun].setIcon( emlakImage);
+                }
+                else if(HangiIsletme.secim==2){
+                    araziButonlari[satir][sutun].setIcon(shopImage);
+                }
+                else if(HangiIsletme.secim==3){
+                    araziButonlari[satir][sutun].setIcon(marketImage);
+                }
+                else if(HangiIsletme.secim==4){
+                    araziButonlari[satir][sutun].setIcon(asphaltImage2);
+                }
+                else if(HangiIsletme.secim==5){
+                    araziButonlari[satir][sutun].setIcon(asphaltImage);
+                }
+               // araziButonlari[satir][sutun].setIcon(digerResimIcon);
             }
 
             digerResimGosteriliyor = !digerResimGosteriliyor;
