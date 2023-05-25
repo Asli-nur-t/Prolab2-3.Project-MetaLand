@@ -15,6 +15,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class OyuncuGirisiArayuzu extends JFrame {
     private JLabel adLabel, soyadLabel, takmaAdLabel, sifreLabel;
@@ -72,7 +73,7 @@ public class OyuncuGirisiArayuzu extends JFrame {
                     boolean girisBasarili = kullaniciGirisiniKontrolEt(takmaAd, sifre);
                     if (girisBasarili) {
                         JOptionPane.showMessageDialog(OyuncuGirisiArayuzu.this, "Giriş başarılı.");
-                       // new OyunArayuzu();
+                        new OyunArayuzu();
                         dispose();
                     } else {
                         JOptionPane.showMessageDialog(OyuncuGirisiArayuzu.this, "Giriş başarısız. Geçersiz takma ad veya şifre.");
@@ -153,7 +154,7 @@ public class OyuncuGirisiArayuzu extends JFrame {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return false; // Kayıt başarısız, takma ad zaten kullanılıyor.
+                return false; // Kayıt başarısız,takma ad zaten kullanılıyor.
             } else {
                 sql = "INSERT INTO oyuncular (kullanici_adi, kullanici_soyadi, kullanici_takma_adi, kullanici_sifresi) VALUES (?, ?, ?, ?)";
                 stmt = conn.prepareStatement(sql);
@@ -171,25 +172,28 @@ public class OyuncuGirisiArayuzu extends JFrame {
         return false; // Kayıt başarısız
     }
 
-    private boolean kullaniciGirisiniKontrolEt(String takmaAd, String sifre) {
-        String url = "jdbc:mysql://localhost:3306/metaland";
-        String kullanici = "root";
-         sifre = "Qwertyu@123";
+   private boolean kullaniciGirisiniKontrolEt(String takmaAd, String sifre) {
+    String url = "jdbc:mysql://localhost:3306/metaland";
+    String kullanici = "root";
+    String sifreDb = "Qwertyu@123";
+    
+    try (Connection conn = DriverManager.getConnection(url, kullanici, sifreDb)) {
+        String sql = "SELECT COUNT(*) FROM oyuncular WHERE kullanici_takma_adi = '" + takmaAd + "' AND kullanici_sifresi = '" + sifre + "'";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        rs.next();
+        int kayitSayisi = rs.getInt(1);
+        return kayitSayisi > 0; // Eşleşme varsa başarılı giriş
 
-        try (Connection conn = DriverManager.getConnection(url, kullanici, sifre)) {
-            String sql = "SELECT * FROM oyuncular WHERE kullanici_takma_adi = ? AND kullanici_sifresi = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, takmaAd);
-            stmt.setString(2, sifre);
-            ResultSet rs = stmt.executeQuery();
-
-            return rs.next(); // Eşleşme varsa true, yoksa false döner
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Veritabanı hatası: " + e.getMessage());
-        }
-        return false; // Giriş başarısız
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Veritabanı hatası: " + e.getMessage());
     }
+    
+    System.out.println("Başarısız giriş");
+    return false; // Başarısız giriş
+}
+
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {

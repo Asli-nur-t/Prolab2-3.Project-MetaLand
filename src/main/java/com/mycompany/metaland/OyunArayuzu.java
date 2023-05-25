@@ -133,7 +133,7 @@ updateKullaniciBilgileri(kullaniciTakmaAdiValue, adValue, soyadValue, paraValue,
 
 
 JButton yatayYol = new JButton("yatay yol");
-        yatayYol.setBounds(50, 500, 100, 50);
+        yatayYol.setBounds(666, 500, 100, 50);
         yatayYol.setForeground(Color.WHITE);
         yatayYol.setBackground(Color.pink);
         yatayYol.setOpaque(true);
@@ -149,7 +149,7 @@ JButton yatayYol = new JButton("yatay yol");
         
          
         JButton dikeyYol = new JButton("dikey yol");
-        dikeyYol.setBounds(200, 500, 100, 50);
+        dikeyYol.setBounds(777, 500, 100, 50);
         dikeyYol.setForeground(Color.WHITE);
         dikeyYol.setBackground(Color.pink);
         dikeyYol.setOpaque(true);
@@ -189,33 +189,22 @@ JButton yatayYol = new JButton("yatay yol");
        
 //**********  arka plandaki butonlu arazi düzeni  *************************
 
-       araziButonlari = new JButton[gridBoyutu][gridBoyutu];
-cimIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/OyunArayuzu/src/images/grass.png");
-digerResimIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/grass1.png");
+    araziButonlari = new JButton[gridBoyutu][gridBoyutu];
+    cimIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/OyunArayuzu/src/images/grass.png");
+    digerResimIcon = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/grass1.png");
 
 
-oyunPaneli.add(backgroundLabel, BorderLayout.CENTER);
-for (int i = 0; i < gridBoyutu; i++) {
-    for (int j = 0; j < gridBoyutu; j++) {
+    oyunPaneli.add(backgroundLabel, BorderLayout.CENTER);
+    for (int i = 0; i < gridBoyutu; i++) {
+        for (int j = 0; j < gridBoyutu; j++) {
         
-       //  araziButonlariMatrisi[i][j] = 0;
+            //  araziButonlariMatrisi[i][j] = 0;
          
-        araziButonlari[i][j] = new JButton();
-        araziButonlari[i][j].setPreferredSize(new Dimension(25, 25));
-        //araziButonlari[i][j].setIcon(cimIcon);
-         if (i % 3 == 0) {
-            araziButonlari[i][j].setIcon(asphaltImage2);
-        } 
-         else if(j % 3
-                 
-                 
-                 
-                 == 0){
-             //araziButonlari[i][j].setIcon(asphaltImage);
-         }
-         else  {
-            araziButonlari[i][j].setIcon(cimIcon);
-        }
+            araziButonlari[i][j] = new JButton();
+            araziButonlari[i][j].setPreferredSize(new Dimension(25, 25));
+        araziButonlari[i][j].setIcon(cimIcon);
+      
+       
         araziButonlari[i][j].setContentAreaFilled(false);
         araziButonlari[i][j].setBorderPainted(false);
         araziButonlari[i][j].setOpaque(false);
@@ -295,7 +284,118 @@ for (int i = 0; i < gridBoyutu; i++) {
             int esyaMiktari = rs.getInt("kullanici_esya_miktari");
             int yemekMiktari = rs.getInt("kullanici_yemek_miktari");
 
+            
+         // Kullanıcı bilgi etiket paneli
+            JPanel kullaniciBilgiEtiketPaneli = new JPanel();
+            kullaniciBilgiEtiketPaneli.setLayout(new GridBagLayout());
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.anchor = GridBagConstraints.WEST;
+            constraints.insets.bottom = 5;
 
+            oyuncuBilgiButonu= new JButton();
+            oyuncuBilgiButonu.setBackground(Color.cyan);
+            oyuncuBilgiButonu.setOpaque(true);
+            oyuncuBilgiButonu.setBorderPainted(false);
+            
+            oyuncuBilgiButonu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Oyuncubilgibutonuna basılması arazi satın alma butonunun görünmesini tetiklemeli bu şekilde mal varlığı güncellenecek
+                sayac++;
+                if(sayac%2==1)
+                 satinAl.setVisible(true);
+                else satinAl.setVisible(false);
+                
+            }
+        });
+
+                // Etiketleri panele ekleme ve konumlandırma
+                constraints.gridx = 0;
+                constraints.gridy = 0;
+                oyuncuBilgiButonu.add(new JLabel(""+kullaniciTakmaAdi), constraints);
+                kullaniciBilgiEtiketPaneli.add(oyuncuBilgiButonu, constraints);
+
+                constraints.gridx = 1;
+                constraints.gridy = 0;
+                kullaniciBilgiEtiketPaneli.add(kullaniciTakmaAdiValue, constraints);
+
+                constraints.gridx = 0;
+                constraints.gridy = 1;
+                kullaniciBilgiEtiketPaneli.add(new JLabel("Adı:"+ad), constraints);
+
+                constraints.gridx = 0;
+                constraints.gridy = 1;
+                kullaniciBilgiEtiketPaneli.add(adValue, constraints);
+
+                constraints.gridx = 0;
+                constraints.gridy = 2;
+                kullaniciBilgiEtiketPaneli.add(new JLabel("Soyadı:"+soyad), constraints);
+
+                constraints.gridx = 0;
+                constraints.gridy = 2;
+                kullaniciBilgiEtiketPaneli.add(soyadValue, constraints);
+
+                constraints.gridx = 0;
+                constraints.gridy = 3;
+                kullaniciBilgiEtiketPaneli.add(new JLabel("Para:"+para), constraints);
+
+                constraints.gridx = 0;
+                constraints.gridy = 3;
+                kullaniciBilgiEtiketPaneli.add(paraValue, constraints);
+
+                constraints.gridx = 0;
+                constraints.gridy = 4;
+                kullaniciBilgiEtiketPaneli.add(new JLabel("Eşya Miktarı:"+esyaMiktari), constraints);
+
+                constraints.gridx = 0;
+                constraints.gridy = 4;
+                kullaniciBilgiEtiketPaneli.add(esyaValue, constraints);
+
+                constraints.gridx = 0;
+                constraints.gridy = 5;
+                kullaniciBilgiEtiketPaneli.add(new JLabel("Yemek Miktarı:"+yemekMiktari), constraints);
+
+                constraints.gridx = 0;
+                constraints.gridy = 5;
+                kullaniciBilgiEtiketPaneli.add(yemekValue, constraints);
+
+                    // Kullanıcı bilgileri paneline etiket panelini ekleyin
+
+                kullaniciBilgileriPaneli.add(kullaniciBilgiEtiketPaneli);
+
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            if (rs != null)
+                                rs.close();
+                             if (stmt != null)
+                                stmt.close();
+                                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+      
+      
+      
+      private void satinAlmaIslemi(JLabel kullaniciTakmaAdiValue, JLabel adValue, JLabel soyadValue,
+        JLabel paraValue, JLabel esyaValue, JLabel yemekValue) {
+          
+          
+    try {
+        stmt = conn.createStatement();
+        rs = stmt.executeQuery("SELECT kullanici_takma_adi, kullanici_adi, kullanici_soyadi, kullanici_para_miktari, kullanici_esya_miktari, kullanici_yemek_miktari FROM oyuncular");
+        while (rs.next()) { // Tüm kayıtları döngüyle getirebilmek için
+            String kullaniciTakmaAdi = rs.getString("kullanici_takma_adi");
+            String ad = rs.getString("kullanici_adi");
+            String soyad = rs.getString("kullanici_soyadi");
+            double para = rs.getDouble("kullanici_para_miktari");
+            int esyaMiktari = rs.getInt("kullanici_esya_miktari");
+            int yemekMiktari = rs.getInt("kullanici_yemek_miktari");
+
+            
          // Kullanıcı bilgi etiket paneli
             JPanel kullaniciBilgiEtiketPaneli = new JPanel();
             kullaniciBilgiEtiketPaneli.setLayout(new GridBagLayout());
