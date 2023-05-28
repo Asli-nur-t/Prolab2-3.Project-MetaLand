@@ -25,6 +25,7 @@ public class YoneticiGirisArayuzu extends JFrame {
     private JComboBox<String> comboBoxTable;
     private JComboBox<String> comboBoxColumn;
     private JTextField textFieldValue;
+    private JComboBox<Integer> comboBoxRows;
 
     public YoneticiGirisArayuzu() {
         setTitle("Yönetici Arayüzü");
@@ -68,6 +69,8 @@ public class YoneticiGirisArayuzu extends JFrame {
         bottomPanel.add(geributonu);
         add(bottomPanel, BorderLayout.EAST);
         
+        
+        
         JPanel addPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         addPanel.add(new JLabel("Tablo Seç:"));
         comboBoxTable = new JComboBox<>(new String[]{"oyuncular", "oyun_verileri"}); //***tablo adlarını başta manuel ekledim ama bunun bir önemi yok*****
@@ -80,6 +83,10 @@ public class YoneticiGirisArayuzu extends JFrame {
         addPanel.add(textFieldValue);
         JButton ekleButonu = new JButton("Ekle");
         addPanel.add(ekleButonu);
+        
+        addPanel.add(new JLabel("Satır Seç:"));
+        comboBoxRows = new JComboBox<>();
+        addPanel.add(comboBoxRows);
         add(addPanel, BorderLayout.WEST);
 
         
@@ -118,31 +125,36 @@ public class YoneticiGirisArayuzu extends JFrame {
                     
                     
                     comboBoxTable.addActionListener(new ActionListener() {
-                     @Override
-                     public void actionPerformed(ActionEvent e) {
-                       String selectedTable = (String) comboBoxTable.getSelectedItem();
-                          try {
-                          updateColumnComboBox(connection, selectedTable);
-                            } catch (SQLException ex) {
-                        textArea.append("Sütun güncelleme hatası: " + ex.getMessage() + "\n");
-                         Logger.getLogger(YoneticiGirisArayuzu.class.getName()).log(Level.SEVERE, null, ex);
-                           }
-                          }
-                        });
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String selectedTable = (String) comboBoxTable.getSelectedItem();
+        try {
+            updateColumnComboBox(connection, selectedTable);
+            updateRowsComboBox(connection, selectedTable);
+        } catch (SQLException ex) {
+            textArea.append("Sütun ve satır güncelleme hatası: " + ex.getMessage() + "\n");
+            Logger.getLogger(YoneticiGirisArayuzu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+});
+
+
 
 
                     
                     
-                    editButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            String selectedTable = (String) comboBoxTable.getSelectedItem();
-                            String selectedColumn = (String) comboBoxColumn.getSelectedItem();
-                            String newValue = textFieldValue.getText();
+                   editButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String selectedTable = (String) comboBoxTable.getSelectedItem();
+                        String selectedColumn = (String) comboBoxColumn.getSelectedItem();
+                        String newValue = textFieldValue.getText();
+                        int selectedRow = (int) comboBoxRows.getSelectedItem();
 
-                            Guncelle(connection, selectedTable, selectedColumn, newValue);
-                        }
-                    });
+                        Guncelle(connection, selectedTable, selectedColumn, newValue, selectedRow);
+                    }
+                });
+
                     
                     
                     //****özellikle işletme bilgilerine ulaşmalıyım
@@ -195,34 +207,25 @@ public class YoneticiGirisArayuzu extends JFrame {
         setVisible(true);
     }
 
+    
+    
     private void updateComboBoxes(Connection connection) throws SQLException {
-        // Tablo seçeneklerini güncelle
-        DatabaseMetaData metaData = connection.getMetaData();
-        ResultSet tables = metaData.getTables(null, null, null, new String[]{"TABLE"});
-        ArrayList<String> tableNames = new ArrayList<String>();
+    // Tablo seçeneklerini güncelle
+    DatabaseMetaData metaData = connection.getMetaData();
+    ResultSet tables = metaData.getTables(null, null, null, new String[]{"TABLE"});
+    ArrayList<String> tableNames = new ArrayList<String>();
 
-
-
-
-        while (tables.next()) {
-            String tableName = tables.getString("TABLE_NAME");
-            tableNames.add(tableName);
-        }
-        comboBoxTable.setModel(new DefaultComboBoxModel<>(tableNames.toArray(new String[0])));
-
-       /* // Sütun seçeneklerini güncelle
-        String selectedTable = (String) comboBoxTable.getSelectedItem();
-    ResultSet columns = metaData.getColumns(null, null, selectedTable, null);
-    ArrayList<String> columnNames = new ArrayList<>();
-    while (columns.next()) {
-        String columnName = columns.getString("COLUMN_NAME");
-        columnNames.add(columnName);
+    while (tables.next()) {
+        String tableName = tables.getString("TABLE_NAME");
+        tableNames.add(tableName);
     }
-    comboBoxColumn.setModel(new DefaultComboBoxModel<>(columnNames.toArray(new String[0])));
-    */
-    
-    
-    }
+    comboBoxTable.setModel(new DefaultComboBoxModel<>(tableNames.toArray(new String[0])));
+
+    // Sütun seçeneklerini güncelle
+    String selectedTable = (String) comboBoxTable.getSelectedItem();
+    updateColumnComboBox(connection, selectedTable);
+}
+
     
     private void updateColumnComboBox(Connection connection, String selectedTable) throws SQLException {
     DatabaseMetaData metaData = connection.getMetaData();
@@ -236,15 +239,48 @@ public class YoneticiGirisArayuzu extends JFrame {
 }
 
 
-    private void Guncelle(Connection connection, String table, String column, String newValue) {
+    
+    private void updateRowsComboBox(Connection connection, String selectedTable) throws SQLException {
+        String query = "SELECT COUNT(*) FROM " + selectedTable;
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+        resultSet.next();
+        int rowCount = resultSet.getInt(1);
+
+        Integer[] rows = new Integer[rowCount];
+        for (int i = 0; i < rowCount; i++) {
+            rows[i] = i + 1;
+        }
+
+        comboBoxRows.setModel(new DefaultComboBoxModel<>(rows));
+    }
+
+    private void Guncelle(Connection connection, String table, String column, String newValue, int selectedRow) {
         try {
             Statement statement = connection.createStatement();
-            String updateQuery = "UPDATE " + table + " SET " + column + " = '" + newValue + "'";
+            String updateQuery = "UPDATE " + table + " SET " + column + " = '" + newValue + "' WHERE " + getPrimaryKeyColumn(table) + " = " + selectedRow;
             int rowsAffected = statement.executeUpdate(updateQuery);
             textArea.append(rowsAffected + " satır güncellendi.\n");
         } catch (SQLException ex) {
             textArea.append("Güncelleme hatası: " + ex.getMessage() + "\n");
             Logger.getLogger(YoneticiGirisArayuzu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private String getPrimaryKeyColumn(String table) {
+        switch (table) {
+            case "isletmeler":
+                return "isletme_id";
+            case "alanlar":
+                return "alan_id";
+            case "oyunlar":
+                return "oyun_id";
+            case "emlaklar":
+                return "emlak_id";
+            case "oyuncular":
+                return "kullanici_no";
+            default:
+                return "";
         }
     }
 

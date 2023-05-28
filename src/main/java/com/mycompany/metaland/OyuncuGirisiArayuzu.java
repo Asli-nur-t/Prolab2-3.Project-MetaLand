@@ -50,10 +50,15 @@ public class OyuncuGirisiArayuzu extends JFrame {
                     boolean kayitBasarili = veritabaninaOyuncuEkle(ad, soyad, takmaAd, sifre);
                     if (kayitBasarili) {
                         JOptionPane.showMessageDialog(OyuncuGirisiArayuzu.this, "Kayıt başarılı.");
-                        adField.setText("");
+                         adField.setText("");
                         soyadField.setText("");
                         takmaAdField.setText("");
                         sifreField.setText("");
+                        
+                         new OyunArayuzu();
+                        dispose();
+                        
+                       
                     } else {
                         JOptionPane.showMessageDialog(OyuncuGirisiArayuzu.this, "Kayıt başarısız. Bu takma ad zaten kullanılıyor.");
                     }

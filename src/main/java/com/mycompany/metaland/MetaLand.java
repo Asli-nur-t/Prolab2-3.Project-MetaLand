@@ -17,7 +17,7 @@ public class MetaLand {
 
      public static void main(String[] args) {
            
-        //String url = "jdbc:mysql://localhost:3306/mysql?zeroDateTimeBehavior=CONVERT_TO_NULL";
+       
            String url = "jdbc:mysql://localhost:3306/metaland?zeroDateTimeBehavior=CONVERT_TO_NULL";
 
         String kullaniciAdi = "root"; // Veritabanı kullanıcı adı
@@ -38,13 +38,10 @@ public class MetaLand {
            
             // Sonuçları işleme
             while (resultSet.next()) {
-                // Veri çekme
-             //  int id = resultSet.getInt("kullanici_soyadi");
+                
                 String ad = resultSet.getString("kullanici_adi");
                  String soyad = resultSet.getString("kullanici_soyadi");
-                // Diğer sütunları da çekebilirsiniz
-
-                // Sonuçları kullanma
+                
                 System.out.println(" Ad: " + ad+"Soyad: "+soyad);
             }
 
@@ -55,8 +52,8 @@ public class MetaLand {
         }
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-               //MetalanGirisSayfasi Basla= new MetalanGirisSayfasi();
-                new OyunArayuzu();
+               MetalanGirisSayfasi Basla= new MetalanGirisSayfasi();
+                //new OyunArayuzu();
                // new HangiIsletme();
             }
         });
