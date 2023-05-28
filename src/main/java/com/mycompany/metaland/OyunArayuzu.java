@@ -7,6 +7,7 @@ package com.mycompany.metaland;
 import static com.mycompany.metaland.HangiIsletme.secim;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -15,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -71,8 +73,8 @@ public class OyunArayuzu {
     
     private int[] kullaniciNumaralari;
 
-    static final int yemekFiyati=100;//50 birim yemek 100 para seçim 4
-    static final int esyaFiyati=200;//50 birim esya 200 para seçim 5
+    static final int yemekFiyati=100;//100 birim yemek 100 para// seçim 4
+    static final int esyaFiyati=200;//50 birim esya 200 para// seçim 5
     static JButton oyuncuBilgiButonu;
     
     static String satinAlanKisi;
@@ -143,7 +145,7 @@ kullaniciBilgileriPaneli.add(kullaniciBilgiEtiketPaneli, BorderLayout.WEST);
 updateKullaniciBilgileri();
 
 
-
+/*
 JButton yatayYol = new JButton("yatay yol");
         yatayYol.setBounds(666, 500, 100, 50);
         yatayYol.setForeground(Color.WHITE);
@@ -225,7 +227,7 @@ JButton yatayYol = new JButton("yatay yol");
         backgroundLabel.setVisible(true);
     }
 }   kullaniciBilgileriPaneli.add(saatLabel);
-      //  saatSistemiBaslat();
+        saatSistemiBaslat();
         oyunPaneli.add(backgroundLabel, BorderLayout.CENTER);
         backgroundLabel.setBounds(0, 0, 1000, 800);
         backgroundLabel.setVisible(true);
@@ -282,11 +284,11 @@ JButton yatayYol = new JButton("yatay yol");
     
                 
 
-      private void updateKullaniciBilgileri() {
+     private void updateKullaniciBilgileri() {
     try {
         stmt = conn.createStatement();
         rs = stmt.executeQuery("SELECT kullanici_takma_adi, kullanici_adi, kullanici_soyadi, kullanici_para_miktari, kullanici_esya_miktari, kullanici_yemek_miktari FROM oyuncular");
-        while (rs.next()) { // Tüm kayıtları döngüyle getirebilmek için
+        while (rs.next()) {
             String kullaniciTakmaAdi = rs.getString("kullanici_takma_adi");
             String ad = rs.getString("kullanici_adi");
             String soyad = rs.getString("kullanici_soyadi");
@@ -294,110 +296,127 @@ JButton yatayYol = new JButton("yatay yol");
             int esyaMiktari = rs.getInt("kullanici_esya_miktari");
             int yemekMiktari = rs.getInt("kullanici_yemek_miktari");
 
-            
-         // Kullanıcı bilgi etiket paneli
-            JPanel kullaniciBilgiEtiketPaneli = new JPanel();
-            kullaniciBilgiEtiketPaneli.setLayout(new GridBagLayout());
-            GridBagConstraints constraints = new GridBagConstraints();
-            constraints.anchor = GridBagConstraints.WEST;
-            constraints.insets.bottom = 5;
-
-            oyuncuBilgiButonu= new JButton();
-            oyuncuBilgiButonu.setBackground(Color.cyan);
-            oyuncuBilgiButonu.setOpaque(true);
-            oyuncuBilgiButonu.setBorderPainted(false);
-            
-            oyuncuBilgiButonu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //Oyuncubilgibutonuna basılması arazi satın alma butonunun görünmesini tetiklemeli bu şekilde mal varlığı güncellenecek
-                
-                System.out.println("satın alma işlemi "+ kullaniciTakmaAdi+ " için yapılıyor");
-                
-                satinAlanKisi=kullaniciTakmaAdi;
-                
-
-            
-                sayac++;
-                if(sayac%2==1)
-                 satinAl.setVisible(true);
-                else satinAl.setVisible(false);
-                
-            }
-        });
-                    if (kullaniciTakmaAdi.equals(kaybedenKullanici)) {
-                    kullaniciBilgiEtiketPaneli.remove(oyuncuBilgiButonu);
-                    continue; //kaybeden kullanıcıyı atla ve diğer kullanıcıların bilgilerini güncelle
-                        }
-                saatSistemiBaslat();
-                
-                
-                //****** Etiketleri panele ekleme ve konumlandırma******
-                constraints.gridx = 0;
-                constraints.gridy = 0;
-                oyuncuBilgiButonu.add(new JLabel(""+kullaniciTakmaAdi), constraints);
-                kullaniciBilgiEtiketPaneli.add(oyuncuBilgiButonu, constraints);
-
-                /*
-                constraints.gridx = 1;
-                constraints.gridy = 0;
-                kullaniciBilgiEtiketPaneli.add(kullaniciTakmaAdiValue, constraints);*/
-
-                constraints.gridx = 0;
-                constraints.gridy = 1;
-                kullaniciBilgiEtiketPaneli.add(new JLabel("Adı:"+ad), constraints);
-
-                /*constraints.gridx = 0;
-                constraints.gridy = 1;
-                kullaniciBilgiEtiketPaneli.add(adValue, constraints);*/
-
-                constraints.gridx = 0;
-                constraints.gridy = 2;
-                kullaniciBilgiEtiketPaneli.add(new JLabel("Soyadı:"+soyad), constraints);
-
-                
-
-                constraints.gridx = 0;
-                constraints.gridy = 3;
-                kullaniciBilgiEtiketPaneli.add(new JLabel("Para:"+para), constraints);
-
-
-                constraints.gridx = 0;
-                constraints.gridy = 4;
-                kullaniciBilgiEtiketPaneli.add(new JLabel("Eşya Miktarı:"+esyaMiktari), constraints);
-
-                
-
-                constraints.gridx = 0;
-                constraints.gridy = 5;
-                kullaniciBilgiEtiketPaneli.add(new JLabel("Yemek Miktarı:"+yemekMiktari), constraints);
-
-             
-                    
-                    //Ölmeden önceki uyarılar
-                    if(esyaMiktari==100){
-                        JOptionPane.showMessageDialog(null, "Eşya miktarı 100 birimin altına düşmüştür eşya satın almazsanız"+kullaniciTakmaAdi+"ölebilir!!");
-                    }
-                    if(yemekMiktari==100){
-                        JOptionPane.showMessageDialog(null, "Yemek miktarı 100 birimin altına düşmüştür lütfen eşya satın alın"+kullaniciTakmaAdi+"ölebilir!!");
-                    }
-
+            // Kullanıcı bilgi etiket paneli bulma veya oluşturma
+            JPanel kullaniciBilgiEtiketPaneli = getKullaniciBilgiEtiketPaneli(kullaniciTakmaAdi);
+            if (kullaniciBilgiEtiketPaneli == null) {
+                kullaniciBilgiEtiketPaneli = createKullaniciBilgiEtiketPaneli(kullaniciTakmaAdi);
                 kullaniciBilgileriPaneli.add(kullaniciBilgiEtiketPaneli);
-                
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    } finally {
-                        try {
-                            if (rs != null)
-                                rs.close();
-                             if (stmt != null)
-                                stmt.close();
-                                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    }
+            }
+
+            // Etiketleri güncelleme
+            JLabel kullaniciAdiLabel = (JLabel) kullaniciBilgiEtiketPaneli.getComponent(1);
+            kullaniciAdiLabel.setText("Adı: " + ad);
+
+            JLabel kullaniciSoyadiLabel = (JLabel) kullaniciBilgiEtiketPaneli.getComponent(2);
+            kullaniciSoyadiLabel.setText("Soyadı: " + soyad);
+
+            JLabel kullaniciParaLabel = (JLabel) kullaniciBilgiEtiketPaneli.getComponent(3);
+            kullaniciParaLabel.setText("Para: " + para);
+
+            JLabel kullaniciEsyaLabel = (JLabel) kullaniciBilgiEtiketPaneli.getComponent(4);
+            kullaniciEsyaLabel.setText("Eşya Miktarı: " + esyaMiktari);
+
+            JLabel kullaniciYemekLabel = (JLabel) kullaniciBilgiEtiketPaneli.getComponent(5);
+            kullaniciYemekLabel.setText("Yemek Miktarı: " + yemekMiktari);
+
+            // Ölmeden önceki uyarılar
+            if (esyaMiktari == 100) {
+                JOptionPane.showMessageDialog(null, "Eşya miktarı 100 birimin altına düşmüştür, eşya satın almazsanız " + kullaniciTakmaAdi + " ölebilir!!");
+            }
+            if (yemekMiktari == 100) {
+                JOptionPane.showMessageDialog(null, "Yemek miktarı 100 birimin altına düşmüştür, lütfen eşya satın alın " + kullaniciTakmaAdi + " ölebilir!!");
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (rs != null)
+                rs.close();
+            if (stmt != null)
+                stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+// Kullanıcı bilgi etiket panelini bulma
+private JPanel getKullaniciBilgiEtiketPaneli(String kullaniciTakmaAdi) {
+    Component[] components = kullaniciBilgileriPaneli.getComponents();
+    for (Component component : components) {
+        if (component instanceof JPanel) {
+            JPanel panel = (JPanel) component;
+            if (panel.getComponentCount() > 0) {
+                JButton oyuncuBilgiButonu = (JButton) panel.getComponent(0);
+                if (oyuncuBilgiButonu.getText().equals(kullaniciTakmaAdi)) {
+                    return panel;
                 }
+            }
+        }
+    }
+    return null;
+}
+
+// Kullanıcı bilgi etiket paneli oluşturma
+private JPanel createKullaniciBilgiEtiketPaneli(String kullaniciTakmaAdi) {
+    JPanel kullaniciBilgiEtiketPaneli = new JPanel();
+    kullaniciBilgiEtiketPaneli.setLayout(new GridBagLayout());
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.anchor = GridBagConstraints.WEST;
+    constraints.insets.bottom = 5;
+
+    JButton oyuncuBilgiButonu = new JButton(kullaniciTakmaAdi);
+    oyuncuBilgiButonu.setBackground(Color.CYAN);
+    oyuncuBilgiButonu.setOpaque(true);
+    oyuncuBilgiButonu.setBorderPainted(false);
+
+    oyuncuBilgiButonu.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("Satın alma işlemi " + kullaniciTakmaAdi + " için yapılıyor");
+            satinAlanKisi = kullaniciTakmaAdi;
+
+            sayac++;
+            if (sayac % 2 == 1)
+                satinAl.setVisible(true);
+            else
+                satinAl.setVisible(false);
+        }
+    });
+
+    constraints.gridx = 0;
+    constraints.gridy = 0;
+    kullaniciBilgiEtiketPaneli.add(oyuncuBilgiButonu, constraints);
+
+    JLabel kullaniciAdiLabel = new JLabel();
+    constraints.gridx = 0;
+    constraints.gridy = 1;
+    kullaniciBilgiEtiketPaneli.add(kullaniciAdiLabel, constraints);
+
+    JLabel kullaniciSoyadiLabel = new JLabel();
+    constraints.gridx = 0;
+    constraints.gridy = 2;
+    kullaniciBilgiEtiketPaneli.add(kullaniciSoyadiLabel, constraints);
+
+    JLabel kullaniciParaLabel = new JLabel();
+    constraints.gridx = 0;
+    constraints.gridy = 3;
+    kullaniciBilgiEtiketPaneli.add(kullaniciParaLabel, constraints);
+
+    JLabel kullaniciEsyaLabel = new JLabel();
+    constraints.gridx = 0;
+    constraints.gridy = 4;
+    kullaniciBilgiEtiketPaneli.add(kullaniciEsyaLabel, constraints);
+
+    JLabel kullaniciYemekLabel = new JLabel();
+    constraints.gridx = 0;
+    constraints.gridy = 5;
+    kullaniciBilgiEtiketPaneli.add(kullaniciYemekLabel, constraints);
+
+    return kullaniciBilgiEtiketPaneli;
+}
+
       
     private void saatSistemiBaslat() {
     Timer timer = new Timer(1000, new ActionListener() {
@@ -420,6 +439,7 @@ JButton yatayYol = new JButton("yatay yol");
             saatLabel.setText("Saat: " + String.format("%02d", dakika) + ":" + String.format("%02d", saniye));
             System.out.println("saat:" + saat + " dakika:" + dakika + " saniye:" + saniye);
              yemekVeEsyaDegeriDusur(); // Her dakika geçtiğinde yemek ve eşya değerini düşür
+             updateKullaniciBilgileri();
         }
     });
     timer.start();
@@ -433,7 +453,9 @@ JButton yatayYol = new JButton("yatay yol");
         e.printStackTrace();
     }
     
+    
 }
+    
       
       public void kaybedenKullanicilariGuncelle() {
         try {
@@ -498,12 +520,22 @@ JButton yatayYol = new JButton("yatay yol");
             }
         }
     }
-
+      
+      
+      
     public static void main(String[] args) {
         OyunArayuzu arayuz = new OyunArayuzu();
         arayuz.kaybedenKullanicilariGuncelle();
         arayuz.updateKullaniciBilgileri();
         arayuz.iflasEdenKullanicilariGuncelle();
+        Isletme isletme = new Isletme();
+        int isletmeId = 1; // İşletme ID'si
+        isletme.veritabanindanKoordinatlariOku(isletmeId);
+        int xEkseni = isletme.getXEkseni();
+        int yEkseni = isletme.getYEkseni();
+
+        System.out.println("x Ekseni: " + xEkseni);
+        System.out.println("y Ekseni: " + yEkseni);
     }
 }
 

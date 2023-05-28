@@ -9,6 +9,9 @@ import static com.mycompany.metaland.OyunArayuzu.satinAlanKisi;
 import static com.mycompany.metaland.OyunArayuzu.yemekFiyati;
 import java.awt.Color;
 import java.awt.Font;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -52,12 +55,15 @@ public class HangiIsletme extends JFrame {
     ImageIcon marketImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/shop.png");
     JLabel marketLabel = new JLabel(marketImage);
     
+    ImageIcon jobImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/job.png");
+    JLabel jobLabel = new JLabel(jobImage);
+    
     int yemekFiyati=100;//50 birim yemek 100 para seçim 4
     int esyaFiyati=200;//50 birim esya 200 para seçim 5
     
     public HangiIsletme() {
         setTitle("İşletme Seçimi");
-        setSize(400, 600);
+        setSize(500, 700);
         setLocationRelativeTo(null);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -68,13 +74,13 @@ public class HangiIsletme extends JFrame {
         JLabel hangisi = new JLabel("BİR İŞLETME TÜRÜ SEÇİN");
         Font myFont1 = new Font("Arial", Font.BOLD, 30);
         hangisi.setFont(myFont1);
-        hangisi.setBounds(30, 50, 350, 50);
+        hangisi.setBounds(30, 50, 450, 50);
         panel.add(hangisi);
         
 
          JButton satinAl = new JButton("Satın Al");
         satinAl.setVisible(false);
-        satinAl.setBounds(100, 360, 200, 50);
+        satinAl.setBounds(75, 360, 150, 50);
         satinAl.setBackground(Color.BLUE);
         satinAl.setForeground(Color.WHITE);
             satinAl.setOpaque(true);
@@ -86,9 +92,24 @@ public class HangiIsletme extends JFrame {
         
         panel.add(satinAl);
         
+         JButton iseGir = new JButton("İşe Gir");
+        iseGir.setVisible(false);
+        iseGir.setBounds(230, 360, 150, 50);
+        iseGir.setBackground(Color.BLUE);
+        iseGir.setForeground(Color.WHITE);
+        iseGir.setIcon(jobImage);
+            iseGir.setOpaque(true);
+            iseGir.setBorderPainted(false);
+        iseGir.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "Artık çalışıyorsunuz...");
+            dispose(); // Pencereyi kapat
+        });
+        
+        panel.add(iseGir);
+        
         
         JButton emlak = new JButton("Emlak");
-        emlak.setBounds(100, 150, 200, 50);
+        emlak.setBounds(150, 150, 200, 50);
          emlak.setForeground(Color.WHITE);
         emlak.setBackground(Color.pink);
         emlak.setIcon(emlakImage);
@@ -97,13 +118,14 @@ public class HangiIsletme extends JFrame {
         emlak.addActionListener(e -> {
             //JOptionPane.showMessageDialog(null, "Emlak seçildi");
             satinAl.setVisible(true);
+            iseGir.setVisible(true);
             secim=1;
           
         });
         panel.add(emlak);
 
         JButton magaza = new JButton("Mağaza");
-        magaza.setBounds(100, 220, 200, 50);
+        magaza.setBounds(150, 220, 200, 50);
         magaza.setIcon(shopImage);
          magaza.setForeground(Color.WHITE);
         magaza.setBackground(Color.pink);
@@ -112,13 +134,14 @@ public class HangiIsletme extends JFrame {
         magaza.addActionListener(e -> {
            // JOptionPane.showMessageDialog(null, "Mağaza seçildi");
             satinAl.setVisible(true);
+            iseGir.setVisible(true);
             secim=2;
       
         });
         panel.add(magaza);
 
         JButton market = new JButton("Market");
-        market.setBounds(100, 290, 200, 50);
+        market.setBounds(150, 290, 200, 50);
         market.setForeground(Color.WHITE);
         market.setBackground(Color.pink);
         market.setIcon(marketImage);
@@ -128,6 +151,7 @@ public class HangiIsletme extends JFrame {
         market.addActionListener(e -> {
             //JOptionPane.showMessageDialog(null, "Market seçildi");
             satinAl.setVisible(true);
+            iseGir.setVisible(true);
             secim=3;
            
         });
@@ -136,7 +160,7 @@ public class HangiIsletme extends JFrame {
        
         
         JButton iptal = new JButton("Satın Almayı İptal Et");
-        iptal.setBounds(100, 430, 200, 50);
+        iptal.setBounds(150, 500, 200, 50);
         iptal.setForeground(Color.WHITE);
         iptal.setBackground(Color.red);
         iptal.setOpaque(true);
@@ -151,7 +175,7 @@ public class HangiIsletme extends JFrame {
         
         
         JButton yemekAl = new JButton("Yemek satın al");
-        yemekAl.setBounds(50, 500, 150, 50);
+        yemekAl.setBounds(75, 430, 150, 50);
         yemekAl.setForeground(Color.WHITE);
         yemekAl.setBackground(Color.pink);
         yemekAl.setIcon(yemekImage);
@@ -159,13 +183,13 @@ public class HangiIsletme extends JFrame {
         yemekAl.setBorderPainted(false);
         yemekAl.addActionListener(e -> {
            // JOptionPane.showMessageDialog(null, "Yemek satın alınıyor...");
-            
+              secim=4;
                   System.out.println("yemek seçildi");
                  SatinAlma satinAlma = new SatinAlma(OyunArayuzu.satinAlanKisi, yemekFiyati);
                  satinAlma.satinAl();
                  System.out.println("yemek de kişi bu: "+OyunArayuzu.satinAlanKisi);
             satinAl.setVisible(true);
-            secim=4;
+          
            
         });
         panel.add(yemekAl);
@@ -173,7 +197,7 @@ public class HangiIsletme extends JFrame {
         
          
         JButton esyaAl = new JButton("Eşya satın al");
-        esyaAl.setBounds(200, 500, 150, 50);
+        esyaAl.setBounds(230, 430, 150, 50);
         esyaAl.setForeground(Color.WHITE);
         esyaAl.setBackground(Color.pink);
         esyaAl.setOpaque(true);
@@ -182,12 +206,13 @@ public class HangiIsletme extends JFrame {
         
         esyaAl.addActionListener(e -> {
             //JOptionPane.showMessageDialog(null, "Eşya satın alınıyor...");
+            secim=5;
             System.out.println("eşya da kişi bu: "+OyunArayuzu.satinAlanKisi);
             SatinAlma satinAlma = new SatinAlma(OyunArayuzu.satinAlanKisi, esyaFiyati);
                  satinAlma.satinAl();
             satinAl.setVisible(true);
 
-            secim=5;
+            
            
         });
         panel.add(esyaAl);
@@ -195,6 +220,9 @@ public class HangiIsletme extends JFrame {
         setContentPane(panel);
         setVisible(true);
     }
+
+    
+ 
 
     public static void main(String[] args) {
         new HangiIsletme();

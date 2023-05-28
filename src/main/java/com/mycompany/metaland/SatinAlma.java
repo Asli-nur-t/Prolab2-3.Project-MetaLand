@@ -34,11 +34,20 @@ public class SatinAlma {
             // Kullanıcının mevcut para miktarını sorgulama
             double kullaniciPara = kullaniciParaAl(connection);
             
+            if(HangiIsletme.secim==4){
+                kullaniciYemekMiktariArtir( connection,kullaniciAdi);
+            }
+            if(HangiIsletme.secim==5){
+                kullaniciEsyaMiktariArtir( connection,kullaniciAdi);
+            }
+            
+            
             // Eğer kullanıcının yeterli parası varsa ürünü satın alma işlemi
             if (kullaniciPara >= urunFiyati) {
                 kullaniciPara -= urunFiyati;
                 kullaniciParaGuncelle(connection, kullaniciPara);
                 System.out.println("Ürün satın alındı. Yeni bakiye: " + kullaniciPara);
+             
             } else {
                 System.out.println("Yetersiz bakiye. Ürün satın alınamadı.");
             }
@@ -108,5 +117,46 @@ public class SatinAlma {
             }
         }
     }
+    
+       private void kullaniciYemekMiktariArtir(Connection connection, String kullaniciAdi) throws SQLException {
+    // Kullanıcının yemek miktarını güncelleme işlemi
+    PreparedStatement statement = null;
+    
+    try {
+        String query = "UPDATE oyuncular SET kullanici_yemek_miktari = kullanici_yemek_miktari + 100 WHERE kullanici_takma_adi = ?";
+        statement = connection.prepareStatement(query);
+        statement.setString(1, kullaniciAdi);
+        
+        // Sorguyu çalıştırma
+        statement.executeUpdate();
+    } finally {
+        // Kapatma işlemleri
+        if (statement != null) {
+            statement.close();
+        }
+    }
+}
+       
+       private void kullaniciEsyaMiktariArtir(Connection connection, String kullaniciAdi) throws SQLException {
+    // Kullanıcının eşya miktarını güncelleme işlemi
+    PreparedStatement statement = null;
+    
+    try {
+        String query = "UPDATE oyuncular SET kullanici_esya_miktari = kullanici_esya_miktari + 50 WHERE kullanici_takma_adi = ?";
+        statement = connection.prepareStatement(query);
+        statement.setString(1, kullaniciAdi);
+        
+        // Sorguyu çalıştırma
+        statement.executeUpdate();
+    } finally {
+        // Kapatma işlemleri
+        if (statement != null) {
+            statement.close();
+        }
+    }
+}
+
+    
+    
 }
 
