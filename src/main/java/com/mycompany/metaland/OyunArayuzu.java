@@ -76,6 +76,7 @@ public class OyunArayuzu {
     static JButton oyuncuBilgiButonu;
     
     static String satinAlanKisi;
+    static String kaybedenKullanici;
     
     private Connection conn;
     private Statement stmt;
@@ -141,7 +142,7 @@ kullaniciBilgileriPaneli.add(kullaniciBilgiEtiketPaneli, BorderLayout.WEST);
 
 updateKullaniciBilgileri();
 
-/*
+
 
 JButton yatayYol = new JButton("yatay yol");
         yatayYol.setBounds(666, 500, 100, 50);
@@ -155,10 +156,11 @@ JButton yatayYol = new JButton("yatay yol");
             secim=4;
            
         });
-       
+       yatayYol.setBounds(450, 700, 400, 800);
         kullaniciBilgiEtiketPaneli.add(yatayYol);
         
-         
+        
+        /* 
         JButton dikeyYol = new JButton("dikey yol");
         dikeyYol.setBounds(777, 500, 100, 50);
         dikeyYol.setForeground(Color.WHITE);
@@ -323,8 +325,14 @@ JButton yatayYol = new JButton("yatay yol");
                 
             }
         });
+                    if (kullaniciTakmaAdi.equals(kaybedenKullanici)) {
+                    kullaniciBilgiEtiketPaneli.remove(oyuncuBilgiButonu);
+                    continue; //kaybeden kullanıcıyı atla ve diğer kullanıcıların bilgilerini güncelle
+                        }
                 saatSistemiBaslat();
-                // Etiketleri panele ekleme ve konumlandırma
+                
+                
+                //****** Etiketleri panele ekleme ve konumlandırma******
                 constraints.gridx = 0;
                 constraints.gridy = 0;
                 oyuncuBilgiButonu.add(new JLabel(""+kullaniciTakmaAdi), constraints);
@@ -427,7 +435,85 @@ JButton yatayYol = new JButton("yatay yol");
     
 }
       
+      public void kaybedenKullanicilariGuncelle() {
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/metaland", "root", "Qwertyu@123");
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT kullanici_takma_adi FROM oyuncular WHERE kullanici_yemek_miktari = 0 AND kullanici_esya_miktari = 0");//yemek ve eşya değerleri 0 olduğunda kullanıcı kaybediyor
+            while (rs.next()) {
+                String kullaniciTakmaAdi = rs.getString("kullanici_takma_adi");
+                System.out.println(kullaniciTakmaAdi + " açlıktan öldü!");
+                kullaniciTakmaAdi=kaybedenKullanici;
+                JOptionPane.showMessageDialog(null,kullaniciTakmaAdi +"kullanıcısı öldü ...");
+                // Kullanıcıyı kaybedildi olarak işaretle
+                String updateQuery = "UPDATE oyuncular SET kullanici_yasiyor_mu = false WHERE kullanici_takma_adi = '" + kullaniciTakmaAdi + "'";
+                stmt.executeUpdate(updateQuery);
+                
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
       
-      
-      
+      public void iflasEdenKullanicilariGuncelle() {
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/metaland", "root", "Qwertyu@123");
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT kullanici_takma_adi FROM oyuncular WHERE kullanici_para_miktari = 0 ");//para değeri 0 olduğunda kullanıcı iflas ederek kaybeder
+            while (rs.next()) {
+                String kullaniciTakmaAdi = rs.getString("kullanici_takma_adi");
+                System.out.println(kullaniciTakmaAdi + " oyunu kaybetti!");
+                JOptionPane.showMessageDialog(null,kullaniciTakmaAdi +"kullanıcısı iflas etti ...");
+               
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        OyunArayuzu arayuz = new OyunArayuzu();
+        arayuz.kaybedenKullanicilariGuncelle();
+        arayuz.updateKullaniciBilgileri();
+        arayuz.iflasEdenKullanicilariGuncelle();
+    }
 }
+
+
+
+
+
+
+
+      
+      
+      
+      
