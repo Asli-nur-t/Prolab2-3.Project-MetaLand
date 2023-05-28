@@ -55,8 +55,8 @@ public class MetaLand {
         }
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-               MetalanGirisSayfasi Basla= new MetalanGirisSayfasi();
-               // new OyunArayuzu();
+               //MetalanGirisSayfasi Basla= new MetalanGirisSayfasi();
+                new OyunArayuzu();
                // new HangiIsletme();
             }
         });

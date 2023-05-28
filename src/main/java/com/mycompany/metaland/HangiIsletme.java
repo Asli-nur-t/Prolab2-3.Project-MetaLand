@@ -5,6 +5,8 @@
 package com.mycompany.metaland;
 
 import static com.mycompany.metaland.OyunArayuzu.oyuncuBilgiButonu;
+import static com.mycompany.metaland.OyunArayuzu.satinAlanKisi;
+import static com.mycompany.metaland.OyunArayuzu.yemekFiyati;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.ImageIcon;
@@ -34,6 +36,13 @@ public class HangiIsletme extends JFrame {
     ImageIcon asphaltImage2 = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/asphalt3.jpeg");
     JLabel asphaltLabel2 = new JLabel(asphaltImage2);
     
+    ImageIcon esyaImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/furniture.png");
+    JLabel esyaLabel = new JLabel(esyaImage);
+    
+    ImageIcon yemekImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/food.png");
+    JLabel yemekLabel = new JLabel(yemekImage);
+    
+    
     ImageIcon shopImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/shop2.png");
     JLabel shopLabell = new JLabel(shopImage);
     
@@ -42,6 +51,10 @@ public class HangiIsletme extends JFrame {
     
     ImageIcon marketImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/shop.png");
     JLabel marketLabel = new JLabel(marketImage);
+    
+    int yemekFiyati=100;//50 birim yemek 100 para seçim 4
+    int esyaFiyati=200;//50 birim esya 200 para seçim 5
+    
     public HangiIsletme() {
         setTitle("İşletme Seçimi");
         setSize(400, 600);
@@ -82,7 +95,7 @@ public class HangiIsletme extends JFrame {
         emlak.setOpaque(true);
         emlak.setBorderPainted(false);
         emlak.addActionListener(e -> {
-            JOptionPane.showMessageDialog(null, "Emlak seçildi");
+            //JOptionPane.showMessageDialog(null, "Emlak seçildi");
             satinAl.setVisible(true);
             secim=1;
           
@@ -97,7 +110,7 @@ public class HangiIsletme extends JFrame {
         magaza.setOpaque(true);
         magaza.setBorderPainted(false);
         magaza.addActionListener(e -> {
-            JOptionPane.showMessageDialog(null, "Mağaza seçildi");
+           // JOptionPane.showMessageDialog(null, "Mağaza seçildi");
             satinAl.setVisible(true);
             secim=2;
       
@@ -113,7 +126,7 @@ public class HangiIsletme extends JFrame {
         market.setBorderPainted(false);
         
         market.addActionListener(e -> {
-            JOptionPane.showMessageDialog(null, "Market seçildi");
+            //JOptionPane.showMessageDialog(null, "Market seçildi");
             satinAl.setVisible(true);
             secim=3;
            
@@ -136,39 +149,48 @@ public class HangiIsletme extends JFrame {
         });
         panel.add(iptal);
         
-        /*
-        JButton yatayYol = new JButton("yatay yol");
-        yatayYol.setBounds(50, 500, 100, 50);
-        yatayYol.setForeground(Color.WHITE);
-        yatayYol.setBackground(Color.pink);
-        yatayYol.setOpaque(true);
-        yatayYol.setBorderPainted(false);
-        yatayYol.addActionListener(e -> {
-            JOptionPane.showMessageDialog(null, "yatay yol seçildi");
+        
+        JButton yemekAl = new JButton("Yemek satın al");
+        yemekAl.setBounds(50, 500, 150, 50);
+        yemekAl.setForeground(Color.WHITE);
+        yemekAl.setBackground(Color.pink);
+        yemekAl.setIcon(yemekImage);
+        yemekAl.setOpaque(true);
+        yemekAl.setBorderPainted(false);
+        yemekAl.addActionListener(e -> {
+           // JOptionPane.showMessageDialog(null, "Yemek satın alınıyor...");
             
+                  System.out.println("yemek seçildi");
+                 SatinAlma satinAlma = new SatinAlma(OyunArayuzu.satinAlanKisi, yemekFiyati);
+                 satinAlma.satinAl();
+                 System.out.println("yemek de kişi bu: "+OyunArayuzu.satinAlanKisi);
             satinAl.setVisible(true);
             secim=4;
            
         });
-        panel.add(yatayYol);
+        panel.add(yemekAl);
         
         
          
-        JButton dikeyYol = new JButton("dikey yol");
-        dikeyYol.setBounds(200, 500, 100, 50);
-        dikeyYol.setForeground(Color.WHITE);
-        dikeyYol.setBackground(Color.pink);
-        dikeyYol.setOpaque(true);
-        dikeyYol.setBorderPainted(false);
+        JButton esyaAl = new JButton("Eşya satın al");
+        esyaAl.setBounds(200, 500, 150, 50);
+        esyaAl.setForeground(Color.WHITE);
+        esyaAl.setBackground(Color.pink);
+        esyaAl.setOpaque(true);
+        esyaAl.setIcon(esyaImage);
+        esyaAl.setBorderPainted(false);
         
-        dikeyYol.addActionListener(e -> {
-            JOptionPane.showMessageDialog(null, "dikey yol seçildi");
+        esyaAl.addActionListener(e -> {
+            //JOptionPane.showMessageDialog(null, "Eşya satın alınıyor...");
+            System.out.println("eşya da kişi bu: "+OyunArayuzu.satinAlanKisi);
+            SatinAlma satinAlma = new SatinAlma(OyunArayuzu.satinAlanKisi, esyaFiyati);
+                 satinAlma.satinAl();
             satinAl.setVisible(true);
 
             secim=5;
            
         });
-        panel.add(dikeyYol);*/
+        panel.add(esyaAl);
 
         setContentPane(panel);
         setVisible(true);

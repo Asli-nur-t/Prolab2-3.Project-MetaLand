@@ -70,7 +70,7 @@ public class YoneticiGirisArayuzu extends JFrame {
         
         JPanel addPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         addPanel.add(new JLabel("Tablo Seç:"));
-        comboBoxTable = new JComboBox<>(new String[]{"oyuncular", "oyun_verileri"}); //***tablo adlarını manuel ekledim*****
+        comboBoxTable = new JComboBox<>(new String[]{"oyuncular", "oyun_verileri"}); //***tablo adlarını başta manuel ekledim ama bunun bir önemi yok*****
         addPanel.add(comboBoxTable);
         addPanel.add(new JLabel("Sütun Seç:"));
         comboBoxColumn = new JComboBox<>();

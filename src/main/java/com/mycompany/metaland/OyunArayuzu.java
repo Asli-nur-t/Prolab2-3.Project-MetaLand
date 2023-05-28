@@ -26,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 /**
  *
@@ -56,19 +57,30 @@ public class OyunArayuzu {
     private final JFrame frame;
     private final JPanel durumPaneli;
     private final JPanel oyunPaneli;
+    private final JLabel saatLabel;
     private final int gridBoyutu = 20; // Grid boyutunu istediğiniz gibi ayarlayabilirsiniz
     private final JButton[][] araziButonlari;
     private final JButton satinAl;
     private final ImageIcon cimIcon;
     private final ImageIcon digerResimIcon;
+    
+    private int saat = 0;
+    private int dakika = 0;
+    static int sayac=0;
     private JPanel kullaniciBilgileriPaneli = new JPanel();
+    
+    private int[] kullaniciNumaralari;
 
+    static final int yemekFiyati=100;//50 birim yemek 100 para seçim 4
+    static final int esyaFiyati=200;//50 birim esya 200 para seçim 5
     static JButton oyuncuBilgiButonu;
+    
+    static String satinAlanKisi;
     
     private Connection conn;
     private Statement stmt;
     private ResultSet rs;
-    static int sayac=0;
+    
     public OyunArayuzu() {
         
         
@@ -101,12 +113,16 @@ public class OyunArayuzu {
         
         backgroundLabel.setVisible(true);
         frame.add(backgroundLabel);
+        
+         saatLabel = new JLabel("Saat: 0");
+        durumPaneli.add(saatLabel);
 
         
         
         // ********* Veritabanı bağlantısı ******
     try {
         conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/metaland", "root", "Qwertyu@123");
+        
     } catch (SQLException e) {
         e.printStackTrace();
     }
@@ -177,10 +193,26 @@ JButton yatayYol = new JButton("yatay yol");
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                 new HangiIsletme();
-                  if(HangiIsletme.secim==1)System.out.println("emlak seçildi");
-                  else if(HangiIsletme.secim==2)System.out.println("mağaza seçildi");
-                  else if(HangiIsletme.secim==3)System.out.println("market seçildi");
+                HangiIsletme secimFrame= new HangiIsletme();
+                  if(secimFrame.secim==1){
+                      System.out.println("emlak seçildi");
+                  }
+                  else if(secimFrame.secim==2){
+                      System.out.println("mağaza seçildi");
+                  }
+                  else if(secimFrame.secim==3){
+                      System.out.println("market seçildi");
+                  }
+                  
+                  else if(secimFrame.secim==4){
+                      System.out.println("yemek seçildi");
+                 SatinAlma satinAlma = new SatinAlma(satinAlanKisi, yemekFiyati);
+                 satinAlma.satinAl();
+                  }
+                  else if(secimFrame.secim==5){
+                      System.out.println("eşya seçildi");
+                 SatinAlma satinAlma = new SatinAlma(satinAlanKisi, esyaFiyati);
+                 satinAlma.satinAl();}
                    frame.add(backgroundLabel);
               
             }
@@ -213,8 +245,8 @@ JButton yatayYol = new JButton("yatay yol");
         oyunPaneli.add(araziButonlari[i][j]);
         backgroundLabel.setVisible(true);
     }
-}
-        
+}   kullaniciBilgileriPaneli.add(saatLabel);
+      //  saatSistemiBaslat();
         oyunPaneli.add(backgroundLabel, BorderLayout.CENTER);
         backgroundLabel.setBounds(0, 0, 1000, 800);
         backgroundLabel.setVisible(true);
@@ -301,6 +333,13 @@ JButton yatayYol = new JButton("yatay yol");
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Oyuncubilgibutonuna basılması arazi satın alma butonunun görünmesini tetiklemeli bu şekilde mal varlığı güncellenecek
+                
+                System.out.println("satın alma işlemi "+ kullaniciTakmaAdi+ " için yapılıyor");
+                
+                satinAlanKisi=kullaniciTakmaAdi;
+                
+
+            
                 sayac++;
                 if(sayac%2==1)
                  satinAl.setVisible(true);
@@ -308,7 +347,7 @@ JButton yatayYol = new JButton("yatay yol");
                 
             }
         });
-
+                saatSistemiBaslat();
                 // Etiketleri panele ekleme ve konumlandırma
                 constraints.gridx = 0;
                 constraints.gridy = 0;
@@ -358,11 +397,17 @@ JButton yatayYol = new JButton("yatay yol");
                 constraints.gridx = 0;
                 constraints.gridy = 5;
                 kullaniciBilgiEtiketPaneli.add(yemekValue, constraints);
-
-                    // Kullanıcı bilgileri paneline etiket panelini ekleyin
+                    
+                    //Ölmeden önceki uyarılar
+                    if(esyaMiktari==100){
+                        JOptionPane.showMessageDialog(null, "Eşya miktarı 100 birimin altına düşmüştür eşya satın almazsanız"+kullaniciTakmaAdiValue+"ölebilir!!");
+                    }
+                    if(yemekMiktari==100){
+                        JOptionPane.showMessageDialog(null, "Yemek miktarı 100 birimin altına düşmüştür lütfen eşya satın alın"+kullaniciTakmaAdiValue+"ölebilir!!");
+                    }
 
                 kullaniciBilgileriPaneli.add(kullaniciBilgiEtiketPaneli);
-
+                
                         }
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -377,6 +422,43 @@ JButton yatayYol = new JButton("yatay yol");
                         }
                     }
                 }
+      
+    private void saatSistemiBaslat() {
+    Timer timer = new Timer(1000, new ActionListener() {
+        int saniye = 0;
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            saniye++;
+            if (saniye == 60) {
+                saniye = 0;
+                dakika++;
+                if (dakika == 60) {
+                    dakika = 0;
+                    saat++;
+                    if (saat == 13) {
+                        saat = 1;
+                    }
+                }
+            }
+            saatLabel.setText("Saat: " + String.format("%02d", dakika) + ":" + String.format("%02d", saniye));
+            System.out.println("saat:" + saat + " dakika:" + dakika + " saniye:" + saniye);
+             yemekVeEsyaDegeriDusur(); // Her dakika geçtiğinde yemek ve eşya değerini düşür
+        }
+    });
+    timer.start();
+}
+
+      private void yemekVeEsyaDegeriDusur() {
+    try {
+        stmt = conn.createStatement();
+        stmt.executeUpdate("UPDATE oyuncular SET kullanici_yemek_miktari = kullanici_yemek_miktari - 1, kullanici_esya_miktari = kullanici_esya_miktari - 0.2");
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    
+}
+      
       
       
       
