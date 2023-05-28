@@ -137,16 +137,11 @@ JPanel kullaniciBilgiEtiketPaneli = new JPanel();
 kullaniciBilgileriPaneli.add(kullaniciBilgiEtiketPaneli, BorderLayout.WEST);
 
 
-JLabel kullaniciTakmaAdiValue = new JLabel("-");
-JLabel adValue = new JLabel("-");
-JLabel soyadValue = new JLabel("-");
-JLabel paraValue = new JLabel("-");
-JLabel esyaValue = new JLabel("-");
-JLabel yemekValue = new JLabel("-");
-
-updateKullaniciBilgileri(kullaniciTakmaAdiValue, adValue, soyadValue, paraValue, esyaValue, yemekValue);
 
 
+updateKullaniciBilgileri();
+
+/*
 
 JButton yatayYol = new JButton("yatay yol");
         yatayYol.setBounds(666, 500, 100, 50);
@@ -180,7 +175,7 @@ JButton yatayYol = new JButton("yatay yol");
         });
         kullaniciBilgiEtiketPaneli.add(dikeyYol);
         
-
+*/
 
        satinAl = new JButton("Arazi Satın Al");
        satinAl.setPreferredSize(new Dimension(200,50));
@@ -194,26 +189,8 @@ JButton yatayYol = new JButton("yatay yol");
             public void actionPerformed(ActionEvent e) {
                 
                 HangiIsletme secimFrame= new HangiIsletme();
-                  if(secimFrame.secim==1){
-                      System.out.println("emlak seçildi");
-                  }
-                  else if(secimFrame.secim==2){
-                      System.out.println("mağaza seçildi");
-                  }
-                  else if(secimFrame.secim==3){
-                      System.out.println("market seçildi");
-                  }
-                  
-                  else if(secimFrame.secim==4){
-                      System.out.println("yemek seçildi");
-                 SatinAlma satinAlma = new SatinAlma(satinAlanKisi, yemekFiyati);
-                 satinAlma.satinAl();
-                  }
-                  else if(secimFrame.secim==5){
-                      System.out.println("eşya seçildi");
-                 SatinAlma satinAlma = new SatinAlma(satinAlanKisi, esyaFiyati);
-                 satinAlma.satinAl();}
-                   frame.add(backgroundLabel);
+              //  updateKullaniciBilgileri();
+                frame.add(backgroundLabel);
               
             }
         });
@@ -303,8 +280,7 @@ JButton yatayYol = new JButton("yatay yol");
     
                 
 
-      private void updateKullaniciBilgileri(JLabel kullaniciTakmaAdiValue, JLabel adValue, JLabel soyadValue,
-        JLabel paraValue, JLabel esyaValue, JLabel yemekValue) {
+      private void updateKullaniciBilgileri() {
     try {
         stmt = conn.createStatement();
         rs = stmt.executeQuery("SELECT kullanici_takma_adi, kullanici_adi, kullanici_soyadi, kullanici_para_miktari, kullanici_esya_miktari, kullanici_yemek_miktari FROM oyuncular");
@@ -354,56 +330,48 @@ JButton yatayYol = new JButton("yatay yol");
                 oyuncuBilgiButonu.add(new JLabel(""+kullaniciTakmaAdi), constraints);
                 kullaniciBilgiEtiketPaneli.add(oyuncuBilgiButonu, constraints);
 
+                /*
                 constraints.gridx = 1;
                 constraints.gridy = 0;
-                kullaniciBilgiEtiketPaneli.add(kullaniciTakmaAdiValue, constraints);
+                kullaniciBilgiEtiketPaneli.add(kullaniciTakmaAdiValue, constraints);*/
 
                 constraints.gridx = 0;
                 constraints.gridy = 1;
                 kullaniciBilgiEtiketPaneli.add(new JLabel("Adı:"+ad), constraints);
 
-                constraints.gridx = 0;
+                /*constraints.gridx = 0;
                 constraints.gridy = 1;
-                kullaniciBilgiEtiketPaneli.add(adValue, constraints);
+                kullaniciBilgiEtiketPaneli.add(adValue, constraints);*/
 
                 constraints.gridx = 0;
                 constraints.gridy = 2;
                 kullaniciBilgiEtiketPaneli.add(new JLabel("Soyadı:"+soyad), constraints);
 
-                constraints.gridx = 0;
-                constraints.gridy = 2;
-                kullaniciBilgiEtiketPaneli.add(soyadValue, constraints);
+                
 
                 constraints.gridx = 0;
                 constraints.gridy = 3;
                 kullaniciBilgiEtiketPaneli.add(new JLabel("Para:"+para), constraints);
 
-                constraints.gridx = 0;
-                constraints.gridy = 3;
-                kullaniciBilgiEtiketPaneli.add(paraValue, constraints);
 
                 constraints.gridx = 0;
                 constraints.gridy = 4;
                 kullaniciBilgiEtiketPaneli.add(new JLabel("Eşya Miktarı:"+esyaMiktari), constraints);
 
-                constraints.gridx = 0;
-                constraints.gridy = 4;
-                kullaniciBilgiEtiketPaneli.add(esyaValue, constraints);
+                
 
                 constraints.gridx = 0;
                 constraints.gridy = 5;
                 kullaniciBilgiEtiketPaneli.add(new JLabel("Yemek Miktarı:"+yemekMiktari), constraints);
 
-                constraints.gridx = 0;
-                constraints.gridy = 5;
-                kullaniciBilgiEtiketPaneli.add(yemekValue, constraints);
+             
                     
                     //Ölmeden önceki uyarılar
                     if(esyaMiktari==100){
-                        JOptionPane.showMessageDialog(null, "Eşya miktarı 100 birimin altına düşmüştür eşya satın almazsanız"+kullaniciTakmaAdiValue+"ölebilir!!");
+                        JOptionPane.showMessageDialog(null, "Eşya miktarı 100 birimin altına düşmüştür eşya satın almazsanız"+kullaniciTakmaAdi+"ölebilir!!");
                     }
                     if(yemekMiktari==100){
-                        JOptionPane.showMessageDialog(null, "Yemek miktarı 100 birimin altına düşmüştür lütfen eşya satın alın"+kullaniciTakmaAdiValue+"ölebilir!!");
+                        JOptionPane.showMessageDialog(null, "Yemek miktarı 100 birimin altına düşmüştür lütfen eşya satın alın"+kullaniciTakmaAdi+"ölebilir!!");
                     }
 
                 kullaniciBilgileriPaneli.add(kullaniciBilgiEtiketPaneli);
