@@ -292,3 +292,7 @@ public class YoneticiGirisArayuzu extends JFrame {
         });
     }
 }
+
+
+
+
