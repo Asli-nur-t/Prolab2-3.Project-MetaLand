@@ -181,7 +181,7 @@ JButton yatayYol = new JButton("yatay yol");
         
 */
 
-       satinAl = new JButton("Arazi Satın Al");
+       satinAl = new JButton("Satın Al");
        satinAl.setPreferredSize(new Dimension(200,50));
        durumPaneli.add(satinAl);
        durumPaneli.setLayout(new BorderLayout()); 

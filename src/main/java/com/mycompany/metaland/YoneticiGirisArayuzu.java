@@ -32,6 +32,7 @@ public class YoneticiGirisArayuzu extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1800, 800);
         setLayout(new BorderLayout());
+        
 
         
         JPanel topPanel = new JPanel(new GridLayout(4, 2));// Üstteki panel

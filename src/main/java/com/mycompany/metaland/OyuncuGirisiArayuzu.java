@@ -24,10 +24,30 @@ public class OyuncuGirisiArayuzu extends JFrame {
     private JButton kaydetButton, girisButton, geriButton;
 
     public OyuncuGirisiArayuzu() {
-        adLabel = new JLabel("Ad:");
-        soyadLabel = new JLabel("Soyad:");
-        takmaAdLabel = new JLabel("Takma Ad:");
-        sifreLabel = new JLabel("Şifre:");
+        
+            ImageIcon backgroundImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/citybackG.jpeg");
+             JLabel backgroundLabel = new JLabel(backgroundImage);
+        // Renkler
+        Color background = new Color(215, 178, 209);
+        Color foreground = new Color(44, 42, 43);
+        Color buttonBackground = new Color(103, 172, 193);
+        Color buttonForeground = Color.pink;
+        Color buttonPanelC = new Color(255,232,160);
+        Font yeniYaziTipi = new Font("Futura", Font.BOLD, 14);
+      
+
+       
+
+        adLabel = new JLabel("AD:");
+        soyadLabel = new JLabel("SOYAD:");
+        takmaAdLabel = new JLabel("TAKMA AD:");
+        sifreLabel = new JLabel("ŞİFRE:");
+        
+        adLabel.setFont(yeniYaziTipi);
+        soyadLabel.setFont(yeniYaziTipi);
+        takmaAdLabel.setFont(yeniYaziTipi);
+        sifreLabel.setFont(yeniYaziTipi);
+        
         adField = new JTextField(20);
         soyadField = new JTextField(20);
         takmaAdField = new JTextField(20);
@@ -35,7 +55,45 @@ public class OyuncuGirisiArayuzu extends JFrame {
         kaydetButton = new JButton("Kaydet");
         girisButton = new JButton("Giriş");
         geriButton = new JButton("Geri");
-
+        
+        /*
+        adField.setFont(yeniYaziTipi);
+        soyadField.setFont(yeniYaziTipi);
+        takmaAdField.setFont(yeniYaziTipi);
+        sifreField.setFont(yeniYaziTipi);*/
+        
+        adField.setPreferredSize(new Dimension(200, 30));
+        soyadField.setPreferredSize(new Dimension(200, 30));
+        takmaAdField.setPreferredSize(new Dimension(200, 30));
+        sifreField.setPreferredSize(new Dimension(200, 30));
+        
+        
+        
+         // Renkleri
+        getContentPane().setBackground(background);
+        adLabel.setForeground(foreground);
+        soyadLabel.setForeground(foreground);
+        takmaAdLabel.setForeground(foreground);
+        sifreLabel.setForeground(foreground);
+        
+        
+        kaydetButton.setBackground(buttonBackground);
+        kaydetButton.setForeground(buttonForeground);
+        kaydetButton.setFont(yeniYaziTipi);
+        kaydetButton.setOpaque(true);
+        kaydetButton.setBorderPainted(false);
+       
+        girisButton.setBackground(buttonBackground);
+        girisButton.setForeground(buttonForeground);
+        girisButton.setFont(yeniYaziTipi);
+        girisButton.setOpaque(true);
+        girisButton.setBorderPainted(false);
+        
+        geriButton.setBackground(buttonBackground);
+        geriButton.setForeground(buttonForeground);
+        geriButton.setFont(yeniYaziTipi);
+        geriButton.setOpaque(true);
+        geriButton.setBorderPainted(false);
         kaydetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -96,52 +154,56 @@ public class OyuncuGirisiArayuzu extends JFrame {
             }
         });
 
-        setLayout(new GridBagLayout());
+        JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 10, 10, 10);
-        add(adLabel, gbc);
+        panel.add(adLabel, gbc);
 
         gbc.gridx = 1;
-        add(adField, gbc);
+        panel.add(adField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        add(soyadLabel, gbc);
+        panel.add(soyadLabel, gbc);
 
         gbc.gridx = 1;
-        add(soyadField, gbc);
+        panel.add(soyadField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        add(takmaAdLabel, gbc);
+        panel.add(takmaAdLabel, gbc);
 
         gbc.gridx = 1;
-        add(takmaAdField, gbc);
+        panel.add(takmaAdField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 3;
-        add(sifreLabel, gbc);
+        panel.add(sifreLabel, gbc);
 
         gbc.gridx = 1;
-        add(sifreField, gbc);
+        panel.add(sifreField, gbc);
 
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        
+        buttonPanel.add(kaydetButton);
+        buttonPanel.add(girisButton);
+        buttonPanel.setBackground(buttonPanelC);
         gbc.gridx = 0;
         gbc.gridy = 4;
-        add(kaydetButton, gbc);
-
-        gbc.gridx = 1;
-        add(girisButton, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 5;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        add(geriButton, gbc);
+        panel.add(buttonPanel, gbc);
+
+        gbc.gridy = 5;
+        panel.add(geriButton, gbc);
+
+        add(panel);
+        panel.setBackground(background);
 
         setTitle("Oyuncu Girişi");
-        setSize(400, 400);
+        setSize(400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);

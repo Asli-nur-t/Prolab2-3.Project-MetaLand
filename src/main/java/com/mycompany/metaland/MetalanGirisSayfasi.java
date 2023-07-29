@@ -27,6 +27,9 @@ public class MetalanGirisSayfasi extends JFrame {
         setSize(1200, 800);
         setLocationRelativeTo(null);
 
+        Color buttonBackground = new Color(103, 172, 193);
+        Color buttonBackgroundY = new Color(110,180, 59);
+        
         ImageIcon backgroundImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/METALANDGiris.png");
         JLabel backgroundLabel = new JLabel(backgroundImage);
         backgroundLabel.setBounds(0, 0, 600, 400);
@@ -42,6 +45,11 @@ public class MetalanGirisSayfasi extends JFrame {
         
         kullaniciGirisiButton = new JButton("Kullanıcı Girişi");
         kullaniciGirisiButton.setBounds(400, 400, 400, 50);
+        kullaniciGirisiButton.setBackground(buttonBackground);
+        kullaniciGirisiButton.setOpaque(true);
+        kullaniciGirisiButton.setForeground(Color.white);
+        kullaniciGirisiButton.setFont(new Font("Arial", Font.BOLD, 18));
+        kullaniciGirisiButton.setBorderPainted(false);
         kullaniciGirisiButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
@@ -53,6 +61,11 @@ public class MetalanGirisSayfasi extends JFrame {
 
         yoneticiGirisiButton = new JButton("Yönetici Girişi");
         yoneticiGirisiButton.setBounds(400, 500, 400, 50);
+        yoneticiGirisiButton.setBackground(buttonBackgroundY);
+        yoneticiGirisiButton.setOpaque(true);
+        yoneticiGirisiButton.setBorderPainted(false);
+        yoneticiGirisiButton.setForeground(Color.white);
+        yoneticiGirisiButton.setFont(new Font("Arial", Font.BOLD, 18));
         yoneticiGirisiButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);

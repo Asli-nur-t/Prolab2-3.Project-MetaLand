@@ -30,6 +30,8 @@ public class HangiIsletme extends JFrame {
     
     static int secim=0;
     
+    
+    
     ImageIcon backgroundImage = new ImageIcon("/Users/aslinurtopcu/NetBeansProjects/MetaLand/images/citybackG.jpeg");
     JLabel backgroundLabel = new JLabel(backgroundImage);
     
@@ -62,6 +64,7 @@ public class HangiIsletme extends JFrame {
     int esyaFiyati=200;//50 birim esya 200 para seçim 5
     
     public HangiIsletme() {
+        
         setTitle("İşletme Seçimi");
         setSize(500, 700);
         setLocationRelativeTo(null);
@@ -218,7 +221,7 @@ public class HangiIsletme extends JFrame {
         panel.add(esyaAl);
 
         setContentPane(panel);
-        setVisible(true);
+        setVisible(true);    
     }
 
     
