@@ -57,8 +57,8 @@ public class MetalanGirisSayfasi extends JFrame {
                 oyuncuArayuzu.setVisible(true);
             }
         });
+        
         backgroundLabel.add(kullaniciGirisiButton);
-
         yoneticiGirisiButton = new JButton("Yönetici Girişi");
         yoneticiGirisiButton.setBounds(400, 500, 400, 50);
         yoneticiGirisiButton.setBackground(buttonBackgroundY);
